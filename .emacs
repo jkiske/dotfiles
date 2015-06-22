@@ -12,10 +12,15 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2"
-     "f0b0710b7e1260ead8f7808b3ee13c3bb38d45564e369cbe15fc6d312f0cd7a0"
-     "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa"
-     default))))
+    ("26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "f0b0710b7e1260ead8f7808b3ee13c3bb38d45564e369cbe15fc6d312f0cd7a0" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(safe-local-variable-values
+   (quote
+    ((eval when
+           (require
+            (quote rainbow-mode)
+            nil t)
+           (rainbow-mode 1)))))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -149,9 +154,50 @@
 ;; MacPorts specific
 (setq ispell-program-name "/opt/local/bin/ispell")
 
-(require 'smart-mode-line)
-(sml/setup)
-(sml/apply-theme 'powerline)
+;; (require 'smart-mode-line)
+;; (sml/setup)
+;; (sml/apply-theme 'powerline)
+
+;; https://github.com/jonathanchu/emacs-powerline
+(add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
+(require 'powerline)
+(defvar powerline-color0)
+(setq powerline-color0 "grey60")
+
+(defpowerline display-time display-time-string)
+(setq display-time-format "%I:%M%p | %a %D")
+(setq display-time-default-load-average nil)
+(display-time-mode t)
+
+(set-face-attribute 'mode-line nil
+                    :foreground "#030303"
+                    :background "#BFEBBF"
+                    :box nil)
+(set-face-attribute 'mode-line-inactive nil
+                    :foreground "#f9f9f9"
+                    :background powerline-color0
+                    :box nil)
+
+;; Special characters:
+;; http://www.gnu.org/software/emacs/manual/html_node/elisp/_0025_002dConstructs.html
+(setq-default mode-line-format
+  (list "%e"
+    '(:eval (append
+       (list
+        (powerline-make-text       "  %2I | %* | %b"   nil)
+        (powerline-arrow           'left                  nil  powerline-color1  )
+        (powerline-make-text       " %l | %c | %p"        powerline-color1  )
+        (powerline-narrow          'left                  powerline-color1  powerline-color2  )
+        (powerline-major-mode      'left                  powerline-color2  )
+        (powerline-make-text       " | "                  powerline-color2  )
+        (powerline-minor-modes     'center                powerline-color2  ))
+     (powerline-pull-right
+      (list
+        (powerline-vc              'right                powerline-color1  powerline-color2  )
+        (powerline-display-time    'right                powerline-color0  powerline-color1  )
+        (powerline-make-text       "%-"                  powerline-color0  ))
+
+      )))))
 
 (require 'smex)
 (smex-initialize)
