@@ -8,8 +8,10 @@
 ;; Install packages
 (defvar local-packages '(auto-complete
                          auto-dim-other-buffers
+                         exec-path-from-shell
                          flx-ido
                          git-gutter+
+                         indent-guide
                          magit
                          multi-web-mode
                          multiple-cursors
@@ -19,10 +21,10 @@
                          popup-kill-ring
                          pos-tip
                          powerline
+                         rainbow-delimiters
                          redo+
                          smex
                          zenburn-theme
-                         exec-path-from-shell
                          ))
 
 (defun uninstalled-packages (packages)
@@ -145,6 +147,8 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (setq ac-show-menu-immediately-on-auto-complete  t)
+(define-key ac-completing-map (kbd "C-g") 'ac-stop)
+(setq ac-delay 0.2)
 
 ;; Python auto-complete
 (require 'jedi)
@@ -265,3 +269,9 @@
 ;; Undo is C-/, Redo is C-?
 (require 'redo+)
 (global-set-key (kbd "C-?") 'redo)
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+(require 'indent-guide)
+(indent-guide-global-mode)
