@@ -5,22 +5,25 @@
         ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
-
-(defvar local-packages '(exec-path-from-shell
-                         git-gutter+
+;; Install packages
+(defvar local-packages '(auto-complete
+                         auto-dim-other-buffers
                          flx-ido
+                         git-gutter+
+                         magit
+                         multi-web-mode
                          multiple-cursors
                          paren
-                         magit
-                         auto-dim-other-buffers
-                         multi-web-mode
-                         powerline
-                         smex
+                         pbcopy
                          popup
-                         pos-tip
                          popup-kill-ring
+                         pos-tip
+                         powerline
                          redo+
-                         auto-complete))
+                         smex
+                         zenburn-theme
+                         exec-path-from-shell
+                         ))
 
 (defun uninstalled-packages (packages)
   (delq nil
@@ -38,24 +41,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "f0b0710b7e1260ead8f7808b3ee13c3bb38d45564e369cbe15fc6d312f0cd7a0" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(safe-local-variable-values
    (quote
     ((eval when
            (require
             (quote rainbow-mode)
             nil t)
-           (rainbow-mode 1)))))
- )
+           (rainbow-mode 1))))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(auto-dim-other-buffers-face ((t (:background "gray15"))))
- '(cursor ((t (:background "salmon1")))))
+ )
 
 ;; key bindings
 (when (eq system-type 'darwin) ;; mac specific settings
@@ -100,6 +98,14 @@
 ;; Don't ding
 (setq ring-bell-function 'ignore)
 (global-set-key (kbd "RET") 'newline-and-indent)
+
+;; Autosave files go to a temp folder
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+(set-cursor-color "salmon1")
 ;; Disable line wrapping in minibuffer
 (add-hook 'minibuffer-setup-hook
   (lambda () (setq truncate-lines nil)))
@@ -180,6 +186,7 @@
 
 (require 'auto-dim-other-buffers)
 (auto-dim-other-buffers-mode t)
+(set-face-attribute 'auto-dim-other-buffers-face nil :background "gray15")
 
 (require 'multi-web-mode)
 (setq mweb-default-major-mode 'html-mode)
@@ -192,10 +199,6 @@
 ;; MacPorts specific
 (setq ispell-program-name "/opt/local/bin/ispell")
 
-;; (require 'smart-mode-line)
-;; (sml/setup)
-;; (sml/apply-theme 'powerline)
-
 ;; https://github.com/jonathanchu/emacs-powerline
 (add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
 (require 'powerline)
@@ -203,7 +206,7 @@
 (setq powerline-color0 "grey60")
 
 (defpowerline display-time display-time-string)
-(setq display-time-format "%I:%M%p | %a %D")
+(setq display-time-format "%I:%M%p | %a %D |")
 (setq display-time-default-load-average nil)
 (display-time-mode t)
 
@@ -222,9 +225,9 @@
   (list "%e"
     '(:eval (append
        (list
-        (powerline-make-text       "  %2I | %* | %b"   nil)
+        (powerline-make-text       "| %2I | %* | %b "   nil)
         (powerline-arrow           'left                  nil  powerline-color1  )
-        (powerline-make-text       " %l | %c | %p"        powerline-color1  )
+        (powerline-make-text       " %c | %l (%p)"        powerline-color1  )
         (powerline-narrow          'left                  powerline-color1  powerline-color2  )
         (powerline-major-mode      'left                  powerline-color2  )
         (powerline-make-text       " | "                  powerline-color2  )
@@ -233,9 +236,7 @@
       (list
         (powerline-vc              'right                powerline-color1  powerline-color2  )
         (powerline-display-time    'right                powerline-color0  powerline-color1  )
-        (powerline-make-text       "%-"                  powerline-color0  ))
-
-      )))))
+        (powerline-make-text       "%-"                  powerline-color0  )))))))
 
 (require 'smex)
 (smex-initialize)
