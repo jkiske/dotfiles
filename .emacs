@@ -5,6 +5,34 @@
         ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
+
+(defvar local-packages '(exec-path-from-shell
+                         git-gutter+
+                         flx-ido
+                         multiple-cursors
+                         paren
+                         magit
+                         auto-dim-other-buffers
+                         multi-web-mode
+                         powerline
+                         smex
+                         popup
+                         pos-tip
+                         popup-kill-ring
+                         redo+
+                         auto-complete))
+
+(defun uninstalled-packages (packages)
+  (delq nil
+	(mapcar (lambda (p) (if (package-installed-p p) nil p)) packages)))
+
+(let ((need-to-install (uninstalled-packages local-packages)))
+  (when need-to-install
+    (progn
+      (package-refresh-contents)
+      (dolist (p need-to-install)
+        (package-install p)))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -88,6 +116,7 @@
   (interactive)
   (describe-function last-command))
 
+;; Makes OSX Load the path from the shell
 (require 'exec-path-from-shell)
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
@@ -106,13 +135,22 @@
 (setq ido-enable-flex-matching t)
 (setq ido-use-faces nil)
 
+;; Simple autocomplete
+(require 'auto-complete-config)
+(ac-config-default)
+(setq ac-show-menu-immediately-on-auto-complete  t)
+
 ;; Python auto-complete
 (require 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 (setq jedi:tooltip-method '(pos-tip))
 (defun my/jedi-mode-hook ()
-  (set (make-local-variable 'ac-max-width) 0.5))
+  (set (make-local-variable 'ac-max-width) 0.5)
+  (local-set-key (kbd "M-.") 'jedi:goto-definition)
+  (local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
+  (local-set-key (kbd "M-/") 'jedi:show-doc)
+  (local-set-key (kbd "M-?") 'jedi:get-in-function-call))
 (add-hook 'jedi-mode-hook 'my/jedi-mode-hook)
 
 ;; Setup multiple cursors
