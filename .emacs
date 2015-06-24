@@ -25,6 +25,7 @@
                          redo+
                          smex
                          zenburn-theme
+                         column-marker
                          ))
 
 (defun uninstalled-packages (packages)
@@ -60,7 +61,10 @@
 ;; key bindings
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-option-modifier 'meta)
-  ;; (setq mac-command-modifier 'super)
+  (setq mac-command-modifier 'super)
+  (global-set-key (kbd "s-v") 'yank)
+  (global-set-key (kbd "s-c") 'kill-ring-save)
+
   (global-set-key [kp-delete] 'delete-char) ;; Sets fn-delete to be right-delete
   (set-face-attribute 'default nil :family "Monaco")
 
@@ -100,7 +104,8 @@
 ;; Don't ding
 (setq ring-bell-function 'ignore)
 (global-set-key (kbd "RET") 'newline-and-indent)
-
+;; Don't capitalize
+(global-unset-key "\M-u")
 ;; Autosave files go to a temp folder
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -151,6 +156,7 @@
 (setq ac-delay 0.2)
 
 ;; Python auto-complete
+(require 'python)
 (require 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
@@ -160,8 +166,15 @@
   (local-set-key (kbd "M-.") 'jedi:goto-definition)
   (local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
   (local-set-key (kbd "M-/") 'jedi:show-doc)
-  (local-set-key (kbd "M-?") 'jedi:get-in-function-call))
+  (local-set-key (kbd "M-?") 'jedi:get-in-function-call)
+  ;; Make C-c C-c behave like C-u C-c C-c in Python mode
+  (local-set-key (kbd "C-c C-c")
+                 (lambda () (interactive) (python-shell-send-buffer t))))
+
 (add-hook 'jedi-mode-hook 'my/jedi-mode-hook)
+
+(require 'column-marker)
+(add-hook 'python-mode-hook (lambda () (interactive) (column-marker-1 80)))
 
 ;; Setup multiple cursors
 (require 'multiple-cursors)
@@ -252,8 +265,8 @@
 ;; "undo" (and "redo") changes in the window configuration with the key
 ;; commands "C-c left" and "C-c right"
 (winner-mode 1)
-(global-set-key (kbd "M-n") 'next-multiframe-window)
-(global-set-key (kbd "M-p") 'previous-multiframe-window)
+(global-set-key (kbd "M-k") 'next-multiframe-window)
+(global-set-key (kbd "M-j") 'previous-multiframe-window)
 
 ;; Shows entire kill ring history
 (require 'popup)
