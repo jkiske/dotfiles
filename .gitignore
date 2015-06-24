@@ -1,0 +1,5 @@
+# Ignore folders
+*/
+
+# Don't ignore hidden folders
+!.*/
