@@ -45,7 +45,7 @@ ZSH_THEME="mh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-extras github python macports osx pip terminalapp)
+plugins=(git git-extras github python macports osx pip terminalapp arcanist)
 
 # User configuration
 
@@ -89,3 +89,7 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export _Z_CMD="j"
 export _Z_DATA="$HOME/.z/z_data"
 source $HOME/.z/z.sh
+
+if [[ -d /etc/arcanist ]]; then
+   source /etc/arcanist/resources/shell/bash-completion
+fi
