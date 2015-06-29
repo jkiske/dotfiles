@@ -63,7 +63,7 @@ source $ZSH/oh-my-zsh.sh
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='emacs -nw'
 else
-  export EDITOR='emacs -q'
+  export EDITOR='emacs --no-desktop'
 fi
 
 # Compilation flags
