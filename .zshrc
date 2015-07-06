@@ -59,13 +59,6 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='emacs -nw'
-else
-  export EDITOR='emacs --no-desktop'
-fi
-
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -80,8 +73,16 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias em='/Applications/Emacs.app/Contents/MacOS/Emacs'
-alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
+alias em=$EMACS_OSX
+alias emacs=$EMACS_OSX
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR="emacs -nw"
+else
+  export EDITOR="$EMACS_OSX -nw --no-desktop"
+fi
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"

@@ -64,8 +64,6 @@
 (global-set-key (kbd "C-c C-SPC") 'just-one-space)
 ;; Don't ding
 (setq ring-bell-function 'ignore)
-;; Who use the bar to scroll?
-(scroll-bar-mode 0)
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 ;; Don't capitalize
