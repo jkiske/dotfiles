@@ -1,3 +1,5 @@
+;; -*- mode: Emacs-Lisp;-*-
+
 (require 'package)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -25,7 +27,8 @@
                          redo+
                          smex
                          zenburn-theme
-                         column-marker))
+                         column-marker
+                         cython-mode))
 
 (defun uninstalled-packages (packages)
   (delq nil
@@ -93,7 +96,6 @@
 (global-set-key (kbd "M-g M-s") 'magit-status)
 (global-set-key (kbd "M-g M-c") 'magit-commit)
 (global-set-key (kbd "M-g M-d") 'magit-diff-unstaged)
-(setq magit-last-seen-setup-instructions "1.4.0")
 ;; Have emacs autoreload on git resets
 (global-auto-revert-mode 1)
 
@@ -234,3 +236,7 @@
 
 (require 'column-marker)
 (add-hook 'python-mode-hook (lambda () (interactive) (column-marker-1 80)))
+
+;; Nobody likes to have to type "yes" to questions, so change it to just
+;; hitting the y key to confirm
+(defalias 'yes-or-no-p 'y-or-n-p)
