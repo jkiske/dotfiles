@@ -10,6 +10,9 @@
 ;; Install packages
 (defvar local-packages '(auto-complete
                          auto-dim-other-buffers
+                         column-marker
+                         cython-mode
+                         diminish
                          exec-path-from-shell
                          flx-ido
                          git-gutter+
@@ -26,9 +29,8 @@
                          rainbow-delimiters
                          redo+
                          smex
-                         zenburn-theme
-                         column-marker
-                         cython-mode))
+                         use-package
+                         zenburn-theme))
 
 (defun uninstalled-packages (packages)
   (delq nil
@@ -98,6 +100,7 @@
 (global-set-key (kbd "M-g M-d") 'magit-diff-unstaged)
 ;; Have emacs autoreload on git resets
 (global-auto-revert-mode 1)
+(setq auto-revert-verbose nil)
 
 ;; https://github.com/jonathanchu/emacs-powerline
 (add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
@@ -206,6 +209,7 @@
   (local-set-key (kbd "M-?") 'jedi:get-in-function-call)
   ;; Make C-c C-c behave like C-u C-c C-c in Python mode
   (local-set-key (kbd "C-c C-c")
+  (define-key python-mode-map (kbd "<backtab>") 'python-indent-dedent-line-backspace)
                  (lambda () (interactive) (python-shell-send-buffer t))))
 (add-hook 'jedi-mode-hook 'my/jedi-mode-hook)
 
@@ -240,3 +244,38 @@
 ;; Nobody likes to have to type "yes" to questions, so change it to just
 ;; hitting the y key to confirm
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Transpose buffers
+(defun transpose-buffers (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+(global-set-key (kbd "C-x 4 t") 'transpose-buffers)
+
+(add-hook 'emacs-lisp-mode-hook (lambda () (interactive) (eldoc-mode 1)))
+(require 'use-package)
+(use-package eldoc
+             :config
+             (progn
+               (use-package diminish
+                            :init
+                            (progn (diminish 'eldoc-mode "")))
+               (setq eldoc-idle-delay 0.3)
+               (set-face-attribute 'eldoc-highlight-function-argument nil
+                                   :underline t :foreground "#7F9F7F"
+                                   :weight 'bold)))
+(require 'diminish)
+(eval-after-load "indent-guide"
+  '(diminish 'indent-guide-mode))
+(eval-after-load "git-gutter+"
+  '(diminish 'git-gutter+-mode "gg"))
+(eval-after-load "auto-dim-other-buffers"
+  '(diminish 'auto-dim-other-buffers-mode))
+(diminish 'auto-fill-function "fill")

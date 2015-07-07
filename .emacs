@@ -17,5 +17,16 @@
 (when (display-graphic-p)
   (load "~/.emacs_gui"))
 
+;; Keep customize settings in their own file
+(setq custom-file "~/.emacs.d/custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+(defun byte-recompile-init-files ()
+  "Recompile all of the startup files"
+  (interactive)
+  (byte-recompile-directory "~/.emacs.d" 0))
+
+;; Turn off debugging
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
