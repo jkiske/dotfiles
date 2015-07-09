@@ -18,6 +18,7 @@
                          git-gutter+
                          indent-guide
                          magit
+                         markdown-mode
                          multi-web-mode
                          multiple-cursors
                          paren
@@ -113,14 +114,16 @@
 (setq display-time-default-load-average nil)
 (display-time-mode t)
 
-(set-face-attribute 'mode-line nil
-                    :foreground "#030303"
-                    :background "#BFEBBF"
-                    :box nil)
-(set-face-attribute 'mode-line-inactive nil
-                    :foreground "#f9f9f9"
-                    :background powerline-color0
-                    :box nil)
+(zenburn-with-color-variables
+  (set-face-attribute 'mode-line nil
+                      :foreground "#030303"
+                      :background zenburn-green+4
+                      :box nil)
+  (set-face-attribute 'mode-line-inactive nil
+                      :foreground "#f9f9f9"
+                      :background powerline-color0
+                      :box nil))
+
 
 ;; Special characters:
 ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/_0025_002dConstructs.html
@@ -209,8 +212,9 @@
   (local-set-key (kbd "M-?") 'jedi:get-in-function-call)
   ;; Make C-c C-c behave like C-u C-c C-c in Python mode
   (local-set-key (kbd "C-c C-c")
-  (define-key python-mode-map (kbd "<backtab>") 'python-indent-dedent-line-backspace)
-                 (lambda () (interactive) (python-shell-send-buffer t))))
+                 (lambda () (interactive) (python-shell-send-buffer t)))
+  (define-key python-mode-map (kbd "<backtab>") 'python-indent-dedent-line-backspace))
+
 (add-hook 'jedi-mode-hook 'my/jedi-mode-hook)
 
 (require 'auto-dim-other-buffers)
@@ -268,14 +272,30 @@
                             :init
                             (progn (diminish 'eldoc-mode "")))
                (setq eldoc-idle-delay 0.3)
-               (set-face-attribute 'eldoc-highlight-function-argument nil
-                                   :underline t :foreground "#7F9F7F"
-                                   :weight 'bold)))
+               (zenburn-with-color-variables
+                 (set-face-attribute 'eldoc-highlight-function-argument nil
+                                     :underline t :foreground zenburn-red
+                                     :weight 'bold))))
+
+;; Calm down minor modes
 (require 'diminish)
 (eval-after-load "indent-guide"
   '(diminish 'indent-guide-mode))
+(eval-after-load "auto-complete"
+  '(diminish 'auto-complete-mode "ac"))
 (eval-after-load "git-gutter+"
   '(diminish 'git-gutter+-mode "gg"))
 (eval-after-load "auto-dim-other-buffers"
   '(diminish 'auto-dim-other-buffers-mode))
 (diminish 'auto-fill-function "fill")
+
+
+(require 'zoom-frm)
+(global-set-key (kbd "C-+") 'zoom-frm-in)
+(global-set-key (kbd "C-_") 'zoom-frm-out)
+(global-set-key (kbd "C-0") 'zoom-frm-unzoom)
+
+(require 'markdown-mode)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(setq markdown-command "pandoc --smart -f markdown -t html")
