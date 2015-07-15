@@ -14,6 +14,7 @@
                          cython-mode
                          diminish
                          exec-path-from-shell
+                         google-c-style
                          flx-ido
                          git-gutter+
                          indent-guide
@@ -31,7 +32,9 @@
                          redo+
                          smex
                          use-package
-                         zenburn-theme))
+                         visual-regexp-steroids
+                         zenburn-theme
+                         zoom-frm))
 
 (defun uninstalled-packages (packages)
   (delq nil
@@ -289,13 +292,20 @@
   '(diminish 'auto-dim-other-buffers-mode))
 (diminish 'auto-fill-function "fill")
 
-
-(require 'zoom-frm)
-(global-set-key (kbd "C-+") 'zoom-frm-in)
-(global-set-key (kbd "C-_") 'zoom-frm-out)
-(global-set-key (kbd "C-0") 'zoom-frm-unzoom)
-
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (setq markdown-command "pandoc --smart -f markdown -t html")
+
+(require 'visual-regexp-steroids)
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
+;; if you use multiple-cursors, this is for you:
+(define-key global-map (kbd "C-c m") 'vr/mc-mark)
+;; to use visual-regexp-steroids's isearch instead of the built-in regexp
+;; isearch, also include the following lines:
+(define-key global-map (kbd "C-M-r") 'vr/isearch-backward) ;; C-M-r
+(define-key global-map (kbd "C-M-s") 'vr/isearch-forward) ;; C-M-s
+
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook 'google-set-c-style)
