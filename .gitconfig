@@ -32,6 +32,6 @@
    c = commit
    lg = log --oneline --decorate
    br = branch -av
-
-[core]
-   excludesfile = /Users/jkiske/.gitignore_global
+[user]
+	name = Jeff Kiske
+	email = jeff@drive.ai
