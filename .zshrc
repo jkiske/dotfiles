@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/jkiske/.oh-my-zsh
+export ZSH=/home/jkiske/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -45,7 +45,7 @@ ZSH_THEME="mh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-extras github python macports osx pip terminalapp arcanist)
+plugins=(git git-extras github python macports osx pip terminalapp arcanist z)
 
 # User configuration
 
@@ -73,24 +73,11 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
-alias em=$EMACS_OSX
-alias emacs=$EMACS_OSX
-
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR="emacs -nw"
-else
-  export EDITOR="$EMACS_OSX -nw --no-desktop"
-fi
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
-export _Z_CMD="j"
-export _Z_DATA="$HOME/.z/z_data"
-source $HOME/.z/z.sh
+export EDITOR="emacs -nw"
 
 if [[ -d /etc/arcanist ]]; then
    source /etc/arcanist/resources/shell/bash-completion
 fi
+
+. $HOME/venv/gm_pipeline/bin/activate

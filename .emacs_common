@@ -15,8 +15,10 @@
                          diminish
                          exec-path-from-shell
                          flx-ido
+                         flycheck
                          git-gutter+
                          indent-guide
+                         jedi
                          magit
                          multi-web-mode
                          multiple-cursors
