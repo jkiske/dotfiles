@@ -49,8 +49,9 @@ plugins=(git git-extras github python macports osx pip terminalapp arcanist)
 
 # User configuration
 
-export PATH="/opt/local/sbin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin"
+export PATH="/opt/local/sbin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/heroku/bin"
 export PYTHONPATH="/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages:$PYTHONPATH"
+export DYLD_FALLBACK_LIBRARY_PATH="/opt/local/lib:/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -83,9 +84,6 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
   export EDITOR="$EMACS_OSX -nw --no-desktop"
 fi
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
 
 export _Z_CMD="j"
 export _Z_DATA="$HOME/.z/z_data"

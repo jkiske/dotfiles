@@ -28,6 +28,7 @@
                          popup-kill-ring
                          pos-tip
                          powerline
+                         py-autopep8
                          rainbow-delimiters
                          redo+
                          smex
@@ -219,6 +220,9 @@
   (define-key python-mode-map (kbd "<backtab>") 'python-indent-dedent-line-backspace))
 
 (add-hook 'jedi-mode-hook 'my/jedi-mode-hook)
+;; Tab width = 2
+(add-hook 'python-mode-hook
+          (function (lambda () (setq indent-tabs-mode nil tab-width 2))))
 
 (require 'auto-dim-other-buffers)
 (auto-dim-other-buffers-mode t)
@@ -309,3 +313,6 @@
 
 (require 'google-c-style)
 (add-hook 'c-mode-common-hook 'google-set-c-style)
+
+(require 'py-autopep8)
+(setq py-autopep8-options '("--indent-size=2"))
