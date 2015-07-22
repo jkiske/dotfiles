@@ -9,3 +9,10 @@
 
 (require 'indent-guide)
 (indent-guide-global-mode)
+
+(require 'zoom-frm)
+(global-set-key (kbd "C-+") 'zoom-frm-in)
+(global-set-key (kbd "C-_") 'zoom-frm-out)
+(global-set-key (kbd "C-0") 'zoom-frm-unzoom)
+
+(setq frame-title-format "%*%b")
