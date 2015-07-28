@@ -18,11 +18,9 @@
                          flycheck
                          git-gutter+
                          google-c-style
-                         indent-guide
                          jedi
                          magit
                          markdown-mode
-                         multi-web-mode
                          multiple-cursors
                          paren
                          pbcopy
@@ -36,6 +34,7 @@
                          smex
                          use-package
                          visual-regexp-steroids
+                         web-mode
                          zenburn-theme
                          zoom-frm))
 
@@ -230,13 +229,9 @@
 (auto-dim-other-buffers-mode t)
 (set-face-attribute 'auto-dim-other-buffers-face nil :background "gray15")
 
-(require 'multi-web-mode)
-(setq mweb-default-major-mode 'html-mode)
-(setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
-                  (js-mode "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
-                  (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
-(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
-(multi-web-global-mode 1)
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-enable-current-column-highlight t)
 
 ;; MacPorts specific
 (setq ispell-program-name "/opt/local/bin/ispell")
@@ -288,8 +283,6 @@
 
 ;; Calm down minor modes
 (require 'diminish)
-(eval-after-load "indent-guide"
-  '(diminish 'indent-guide-mode))
 (eval-after-load "auto-complete"
   '(diminish 'auto-complete-mode "ac"))
 (eval-after-load "git-gutter+"
