@@ -30,7 +30,7 @@
    rb = rebase
    cp = cherry-pick
    c = commit
-   lg = log --oneline --decorate
+   lg = log --oneline --decorate --graph
    br = branch -av
 
 [core]
