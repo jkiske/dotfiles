@@ -98,6 +98,7 @@
 (set-face-foreground 'show-paren-mismatch "red")
 (set-face-attribute 'show-paren-mismatch nil :underline t)
 
+(defvar magit-emacsclient-executable nil)
 (require 'magit)
 (global-set-key (kbd "M-g M-s") 'magit-status)
 (global-set-key (kbd "M-g M-c") 'magit-commit)
