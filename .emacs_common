@@ -25,7 +25,6 @@
                          markdown-mode
                          multiple-cursors
                          pbcopy
-                         powerline
                          projectile
                          py-autopep8
                          rainbow-delimiters

@@ -1,0 +1,3 @@
+[submodule ".emacs.d/vendor/emacs-powerline"]
+	path = .emacs.d/vendor/emacs-powerline
+	url = https://github.com/jonathanchu/emacs-powerline.git
