@@ -5,8 +5,8 @@
 (global-set-key (kbd "s-v") 'yank)
 (global-set-key (kbd "s-c") 'kill-ring-save)
 
-(global-set-key [kp-delete] 'delete-char) ;; Sets fn-delete to be right-delete
-(set-face-attribute 'default nil :family "Monaco")
+;; Sets fn-delete to be right-delete
+(global-set-key [kp-delete] 'delete-char)
 
 (defun copy-from-osx ()
   (shell-command-to-string "pbpaste"))
@@ -26,6 +26,6 @@
 (setq system-uses-terminfo nil)
 
 (set-face-attribute 'default nil
-                    :family "Input Mono Narrow"
+                    :family "Hack"
                     :height 120
                     :weight 'normal)
