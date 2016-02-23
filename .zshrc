@@ -8,7 +8,17 @@ ZSH_THEME="kiske"
 ZSH_CUSTOM=$HOME/.zsh/custom
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-plugins=(git git-extras python macports osx pip terminalapp)
+plugins=(
+    common-aliases
+    git-extras
+    macports
+    osx
+    pip
+    python
+    terminalapp
+    git
+    web-search
+)
 
 # User configuration
 source $ZSH/oh-my-zsh.sh
