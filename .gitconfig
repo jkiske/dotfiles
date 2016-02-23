@@ -35,3 +35,6 @@
 
 [core]
    excludesfile = /Users/jkiske/.gitignore_global
+[user]
+	name = Jeff Kiske
+	email = jeff@drive.ai
