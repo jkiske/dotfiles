@@ -26,4 +26,6 @@
 (setq system-uses-terminfo nil)
 
 (set-face-attribute 'default nil
-                    :family "Input Mono Narrow" :height 120 :weight 'normal)
+                    :family "Input Mono Narrow"
+                    :height 120
+                    :weight 'normal)
