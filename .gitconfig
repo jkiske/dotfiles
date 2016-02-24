@@ -30,8 +30,9 @@
    rb = rebase
    cp = cherry-pick
    c = commit
-   lg = log --oneline --decorate
+   lg = log --oneline --decorate --graph
    br = branch -av
+
 [user]
-	name = Jeff Kiske
-	email = jeff@drive.ai
+   name = Jeff Kiske
+   email = jeff@drive.ai

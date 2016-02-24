@@ -7,12 +7,12 @@
 (blink-cursor-mode -1)
 (global-unset-key "\C-z")
 
-(require 'indent-guide)
-(indent-guide-global-mode)
-
 (require 'zoom-frm)
 (global-set-key (kbd "C-+") 'zoom-frm-in)
 (global-set-key (kbd "C-_") 'zoom-frm-out)
 (global-set-key (kbd "C-0") 'zoom-frm-unzoom)
+(global-set-key (kbd "s-+") 'zoom-frm-in)
+(global-set-key (kbd "s-_") 'zoom-frm-out)
+(global-set-key (kbd "s-0") 'zoom-frm-unzoom)
 
 (setq frame-title-format "%*%b")

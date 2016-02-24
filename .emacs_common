@@ -14,28 +14,24 @@
                          cython-mode
                          diminish
                          exec-path-from-shell
-                         google-c-style
-                         flx-ido
                          flycheck
                          git-gutter+
-                         indent-guide
+                         google-c-style
+                         helm
+                         helm-ls-git
+                         helm-projectile
                          jedi
                          magit
                          markdown-mode
-                         multi-web-mode
                          multiple-cursors
-                         paren
                          pbcopy
-                         popup
-                         popup-kill-ring
-                         pos-tip
-                         powerline
+                         projectile
                          py-autopep8
                          rainbow-delimiters
                          redo+
-                         smex
                          use-package
                          visual-regexp-steroids
+                         web-mode
                          zenburn-theme
                          zoom-frm))
 
@@ -101,6 +97,7 @@
 (set-face-foreground 'show-paren-mismatch "red")
 (set-face-attribute 'show-paren-mismatch nil :underline t)
 
+(defvar magit-emacsclient-executable nil)
 (require 'magit)
 (global-set-key (kbd "M-g M-s") 'magit-status)
 (global-set-key (kbd "M-g M-c") 'magit-commit)
@@ -130,7 +127,6 @@
                       :background powerline-color0
                       :box nil))
 
-
 ;; Special characters:
 ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/_0025_002dConstructs.html
 (setq-default mode-line-format
@@ -150,19 +146,47 @@
         (powerline-display-time 'right powerline-color0  powerline-color1)
         (powerline-make-text "%-" powerline-color0)))))))
 
-(require 'smex)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+(require 'helm)
+(require 'helm-config)
+(require 'helm-ls-git)
+(require 'helm-projectile)
+;; Set default helm key bindings
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+
+;; Google search
+(global-set-key (kbd "C-c h g") 'helm-google)
 
 ;; Shows entire kill ring history
-(require 'popup)
-(require 'pos-tip)
-(require 'popup-kill-ring)
 (global-set-key (kbd "C-y") 'yank)
-(global-set-key (kbd "M-y") 'popup-kill-ring)
+;; Use helm's show kill ring
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+;; rebind tab to run persistent action
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+;; make TAB works in terminal
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+;; list actions using C-z
+(define-key helm-map (kbd "C-z")  'helm-select-action)
+
+(setq helm-mode-fuzzy-match 1)
+(setq helm-completion-in-region-fuzzy-match 1)
+(setq helm-M-x-fuzzy-match t)
+(setq helm-buffers-fuzzy-matching t)
+(setq helm-recentf-fuzzy-match t)
+
+(projectile-global-mode)
+(helm-projectile-on)
+(setq projectile-completion-system 'helm)
+(setq projectile-switch-project-action 'helm-projectile-find-file)
+
+(helm-mode 1)
 
 ;; Undo is C-/, Redo is C-?
 (require 'redo+)
@@ -173,14 +197,6 @@
 
 (put 'upcase-region 'disabled nil)
 
-;; Fuzzy search for file names
-(require 'flx-ido)
-(ido-mode 1)
-(ido-everywhere 1)
-(flx-ido-mode 1)
-(setq ido-enable-flex-matching t)
-(setq ido-use-faces nil)
-
 ;; Simple autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
@@ -190,9 +206,10 @@
 
 ;; Setup multiple cursors
 (require 'multiple-cursors)
-(global-set-key (kbd "C-c s") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-c S") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-c n") 'mc/mark-next-symbol-like-this)
+(global-set-key (kbd "C-c C-s") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-c C-S-S") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C-n") 'mc/mark-next-symbol-like-this)
+(global-set-key (kbd "C-c C-p") 'mc/ummark-next-like-this)
 
 ;; Adds git changes to the gutter on emacs
 (defun describe-last-function()
@@ -203,6 +220,7 @@
 (global-git-gutter+-mode t)
 (global-set-key (kbd "M-g M-p") 'git-gutter+-previous-hunk)
 (global-set-key (kbd "M-g M-n") 'git-gutter+-next-hunk)
+(add-hook 'git-gutter+:update-hooks 'magit-revert-buffer-hook)
 
 ;; Python auto-complete
 (require 'python)
@@ -226,17 +244,31 @@
 (add-hook 'python-mode-hook
           (function (lambda () (setq indent-tabs-mode nil tab-width 2))))
 
+;; Tab width = 2
+(setq indent-tabs-mode nil)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq py-indent-offset 2)
+            (setq python-indent-offset 2)
+            (setq tab-width 2)))
+
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
+
 (require 'auto-dim-other-buffers)
 (auto-dim-other-buffers-mode t)
 (set-face-attribute 'auto-dim-other-buffers-face nil :background "gray15")
 
-(require 'multi-web-mode)
-(setq mweb-default-major-mode 'html-mode)
-(setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
-                  (js-mode "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
-                  (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
-(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
-(multi-web-global-mode 1)
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(defun my-web-mode-hook ()
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-engines-alist
+        '(("django"    . "\\.html\\'"))))
+(add-hook 'web-mode-hook 'my-web-mode-hook)
 
 ;; MacPorts specific
 (setq ispell-program-name "/opt/local/bin/ispell")
@@ -244,8 +276,8 @@
 ;; "undo" (and "redo") changes in the window configuration with the key
 ;; commands "C-c left" and "C-c right"
 (winner-mode 1)
-(global-set-key (kbd "M-k") 'next-multiframe-window)
-(global-set-key (kbd "M-j") 'previous-multiframe-window)
+(global-set-key (kbd "M-j") 'next-multiframe-window)
+(global-set-key (kbd "M-k") 'previous-multiframe-window)
 
 (defun flycheck-python-setup ()
   (flycheck-mode))
@@ -288,8 +320,6 @@
 
 ;; Calm down minor modes
 (require 'diminish)
-(eval-after-load "indent-guide"
-  '(diminish 'indent-guide-mode))
 (eval-after-load "auto-complete"
   '(diminish 'auto-complete-mode "ac"))
 (eval-after-load "git-gutter+"
@@ -318,3 +348,6 @@
 
 (require 'py-autopep8)
 (setq py-autopep8-options '("--indent-size=2"))
+
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.todo\\'" . org-mode))
