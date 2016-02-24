@@ -206,9 +206,10 @@
 
 ;; Setup multiple cursors
 (require 'multiple-cursors)
-(global-set-key (kbd "C-c s") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-c S") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-c n") 'mc/mark-next-symbol-like-this)
+(global-set-key (kbd "C-c C-s") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-c C-S-S") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C-n") 'mc/mark-next-symbol-like-this)
+(global-set-key (kbd "C-c C-p") 'mc/ummark-next-like-this)
 
 ;; Adds git changes to the gutter on emacs
 (defun describe-last-function()
