@@ -36,7 +36,8 @@ fi
 
 # Aliases
 alias donut="sudo mount -t nfs donut1:/donut /donut"
-
+# Package 'common-aliases' makes rm = rm -i which is annoying
+unalias rm
 # Emacs
 EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
 if [[ ! -e $EMACS_OSX ]]; then
