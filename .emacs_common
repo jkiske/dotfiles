@@ -240,6 +240,9 @@
   (define-key python-mode-map (kbd "<backtab>") 'python-indent-dedent-line-backspace))
 
 (add-hook 'jedi-mode-hook 'my/jedi-mode-hook)
+;; Tab width = 2
+(add-hook 'python-mode-hook
+          (function (lambda () (setq indent-tabs-mode nil tab-width 2))))
 
 ;; Tab width = 2
 (setq indent-tabs-mode nil)
