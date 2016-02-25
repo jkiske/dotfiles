@@ -33,6 +33,7 @@ elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     fi
     export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/etc/arcanist/bin:$PATH"
     export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
+    export TERM=xterm-256color
 fi
 
 # Aliases
