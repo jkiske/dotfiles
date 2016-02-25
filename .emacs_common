@@ -81,10 +81,27 @@
 ;; Disable line wrapping in minibuffer
 (add-hook 'minibuffer-setup-hook
           (lambda () (setq truncate-lines nil)))
-;; Adds git changes to the gutter on emacs
+
 (defun describe-last-function()
   (interactive)
   (describe-function last-command))
+;; Nobody likes to have to type "yes" to questions, so change it to just
+;; hitting the y key to confirm
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Transpose buffers
+(defun transpose-buffers (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+(global-set-key (kbd "C-x 4 t") 'transpose-buffers)
 
 ;; Calm down minor modes
 (use-package diminish :ensure t)
@@ -166,10 +183,11 @@
          ("M-y" . helm-show-kill-ring)
          ("C-y" . yank))
   :init (progn (require 'helm-config)
+               (bind-keys :map helm-map
+                          ("<tab>" . helm-execute-persistent-action)
+                          ("C-i" . helm-execute-persistent-action)
+                          ("C-z" . helm-select-action))
                (unbind-key (kbd "C-x c"))
-               (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-               (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-               (define-key helm-map (kbd "C-z")  'helm-select-action)
                (setq helm-mode-fuzzy-match 1)
                (setq helm-completion-in-region-fuzzy-match 1)
                (setq helm-M-x-fuzzy-match t)
@@ -193,15 +211,19 @@
 ;; Simple autocomplete
 (use-package auto-complete
   :ensure t
-  :diminish ac
+  :diminish auto-complete-mode
   :config (progn (require 'auto-complete-config)
                  (ac-config-default)
-                 (setq ac-show-menu-immediately-on-auto-complete  t)
-                 (bind-key "C-g" 'ac-stop ac-completing-map)
-                 (setq ac-delay 0.1)))
+                 (setq ac-show-menu-immediately-on-auto-complete t)
+                 (setq ac-delay 0.1)
+                 (bind-keys :map ac-menu-map
+                            ("C-g" . ac-stop)
+                            ("C-n" . ac-next)
+                            ("C-p" . ac-previous))))
 
 (use-package git-gutter+
   :ensure t
+  :diminish git-gutter+-mode
   :bind (("M-g M-p" . git-gutter+-previous-hunk)
          ("M-g M-n" . git-gutter+-next-hunk))
   :config (progn (global-git-gutter+-mode t)
@@ -240,10 +262,19 @@
 (when (executable-find "ipython")
   (setq python-shell-interpreter "ipython"))
 
-(require 'auto-dim-other-buffers)
-(auto-dim-other-buffers-mode t)
-(set-face-attribute 'auto-dim-other-buffers-face nil :background "gray15")
+(defun flycheck-python-setup ()
+  (flycheck-mode))
+(add-hook 'python-mode-hook #'flycheck-python-setup)
 
+(require 'column-marker)
+(add-hook 'python-mode-hook (lambda () (interactive) (column-marker-1 80)))
+
+(use-package auto-dim-other-buffers
+  :ensure t
+  :diminish auto-dim-other-buffers-mode
+  :config (progn
+            (auto-dim-other-buffers-mode t)
+            (set-face-attribute 'auto-dim-other-buffers-face nil :background "gray15")))
 
 (use-package emmet-mode
   :diminish em
@@ -268,7 +299,8 @@
             (setq web-mode-code-indent-offset 2)
             (setq web-mode-enable-current-column-highlight t)
             (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
-            (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
+            (bind-keys :map ac-menu-map
+                       ("C-;" . web-mode-comment-or-uncomment))
             (unbind-key "C-c C-s" web-mode-map)
             (unbind-key "C-c C-n" web-mode-map)))
 
@@ -287,31 +319,6 @@
   :ensure t
   :bind (("M-j" . next-multiframe-window)
          ("M-k" . previous-multiframe-window)))
-
-(defun flycheck-python-setup ()
-  (flycheck-mode))
-(add-hook 'python-mode-hook #'flycheck-python-setup)
-
-(require 'column-marker)
-(add-hook 'python-mode-hook (lambda () (interactive) (column-marker-1 80)))
-
-;; Nobody likes to have to type "yes" to questions, so change it to just
-;; hitting the y key to confirm
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Transpose buffers
-(defun transpose-buffers (arg)
-  "Transpose the buffers shown in two windows."
-  (interactive "p")
-  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
-    (while (/= arg 0)
-      (let ((this-win (window-buffer))
-            (next-win (window-buffer (funcall selector))))
-        (set-window-buffer (selected-window) next-win)
-        (set-window-buffer (funcall selector) this-win)
-        (select-window (funcall selector)))
-      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
-(global-set-key (kbd "C-x 4 t") 'transpose-buffers)
 
 (use-package eldoc
   :diminish ""

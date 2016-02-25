@@ -32,3 +32,8 @@
                     :family "Hack"
                     :height 120
                     :weight 'normal)
+
+(defun create-tags (dir-name)
+  (interactive "DDirectory: ")
+  (eshell-command
+   (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
