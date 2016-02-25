@@ -8,6 +8,9 @@
 ;; Sets fn-delete to be right-delete
 (global-set-key [kp-delete] 'delete-char)
 
+;; MacPorts specific
+(setq ispell-program-name "/opt/local/bin/ispell")
+
 (defun copy-from-osx ()
   (shell-command-to-string "pbpaste"))
 (defun paste-to-osx (text &optional push)
