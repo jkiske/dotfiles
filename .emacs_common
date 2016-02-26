@@ -85,6 +85,7 @@
 (defun describe-last-function()
   (interactive)
   (describe-function last-command))
+
 ;; Nobody likes to have to type "yes" to questions, so change it to just
 ;; hitting the y key to confirm
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -167,13 +168,14 @@
                                    (powerline-vc 'right powerline-color1 powerline-color2)
                                    (powerline-display-time 'right powerline-color0 powerline-color1)
                                    (powerline-make-text "%-" powerline-color0)))))))))
+
 (use-package helm-ls-git :ensure t)
 (use-package helm-projectile
   :ensure t
-  :diminish proj)
+  :diminish projectile-mode)
 (use-package helm
   :ensure
-  :diminish helm
+  :diminish helm-mode
   :bind (("C-c h" . helm-command-prefix)
          ("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
@@ -277,12 +279,11 @@
             (set-face-attribute 'auto-dim-other-buffers-face nil :background "gray15")))
 
 (use-package emmet-mode
-  :diminish em
+  :diminish emmet-mode
   :ensure t)
 
 (use-package web-mode
   :ensure t
-  :diminish web
   :mode (("\\.phtml\\'" . web-mode)
          ("\\.erb\\'" . web-mode)
          ("\\.jsp\\'" . web-mode)
@@ -307,7 +308,7 @@
 ;; Setup multiple cursors
 (use-package multiple-cursors
   :ensure t
-  :diminish mc
+  :diminish multiple-cursors-mode
   :bind (("C-c C-s" . mc/mark-next-like-this)
          ("C-c C-S-S" . mc/mark-all-like-this)
          ("C-c C-n" . mc/mark-next-symbol-like-this)
@@ -321,7 +322,7 @@
          ("M-k" . previous-multiframe-window)))
 
 (use-package eldoc
-  :diminish ""
+  :diminish eldoc-mode
   :config (progn (add-hook 'emacs-lisp-mode-hook (lambda () (interactive) (eldoc-mode 1)))
                  (setq eldoc-idle-delay 0.3)
                  (zenburn-with-color-variables
