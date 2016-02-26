@@ -5,14 +5,16 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
+
 (global-unset-key "\C-z")
 
-(require 'zoom-frm)
-(global-set-key (kbd "C-+") 'zoom-frm-in)
-(global-set-key (kbd "C-_") 'zoom-frm-out)
-(global-set-key (kbd "C-0") 'zoom-frm-unzoom)
-(global-set-key (kbd "s-+") 'zoom-frm-in)
-(global-set-key (kbd "s-_") 'zoom-frm-out)
-(global-set-key (kbd "s-0") 'zoom-frm-unzoom)
+(use-package zoom-frm
+  :ensure t
+  :bind (("C-+" . zoom-frm-in)
+         ("C-_" . zoom-frm-out)
+         ("C-0" . zoom-frm-unzoom)
+         ("s-+" . zoom-frm-in)
+         ("s-_" . zoom-frm-out)
+         ("s-0" . zoom-frm-unzoom)))
 
 (setq frame-title-format "%*%b")

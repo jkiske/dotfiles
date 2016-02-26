@@ -6,6 +6,29 @@
 (setq debug-on-error t)
 (setq debug-on-quit t)
 
+(require 'package)
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/")
+        ("marmalade" . "http://marmalade-repo.org/packages/")
+        ("melpa" . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+
+;; Install packages
+(defvar local-packages '(use-package))
+(defun uninstalled-packages (packages)
+  (delq nil
+	(mapcar (lambda (p) (if (package-installed-p p) nil p)) packages)))
+(let ((need-to-install (uninstalled-packages local-packages)))
+  (when need-to-install
+    (progn (package-refresh-contents)
+           (dolist (p need-to-install)
+             (package-install p)))))
+
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
+
 ;; Load common files
 (load "~/.emacs_common")
 

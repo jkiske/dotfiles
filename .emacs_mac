@@ -4,27 +4,28 @@
 (setq mac-command-modifier 'super)
 (global-set-key (kbd "s-v") 'yank)
 (global-set-key (kbd "s-c") 'kill-ring-save)
-
-;; Sets fn-delete to be right-delete
 (global-set-key [kp-delete] 'delete-char)
 
 ;; MacPorts specific
 (setq ispell-program-name "/opt/local/bin/ispell")
 
-(defun copy-from-osx ()
-  (shell-command-to-string "pbpaste"))
-(defun paste-to-osx (text &optional push)
-  (let ((process-connection-type nil))
-    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-      (process-send-string proc text)
-      (process-send-eof proc))))
-(setq interprogram-cut-function 'paste-to-osx)
-(setq interprogram-paste-function 'copy-from-osx)
+(use-package pbcopy
+  :ensure t
+  :config (progn (defun copy-from-osx ()
+                   (shell-command-to-string "pbpaste"))
+                 (defun paste-to-osx (text &optional push)
+                   (let ((process-connection-type nil))
+                     (let ((proc
+                            (start-process "pbcopy" "*Messages*" "pbcopy")))
+                       (process-send-string proc text)
+                       (process-send-eof proc))))
+                 (setq interprogram-cut-function 'paste-to-osx)
+                 (setq interprogram-paste-function 'copy-from-osx)))
 
 ;; Makes OSX Load the path from the shell
-(require 'exec-path-from-shell)
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell
+  :ensure t
+  :config (progn (exec-path-from-shell-initialize)))
 
 (setq system-uses-terminfo nil)
 
