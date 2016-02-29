@@ -41,6 +41,9 @@
 
 (set-cursor-color "salmon1")
 
+(diminish 'auto-fill-function)
+(diminish 'auto-revert-mode)
+
 ;; Nobody likes to have to type "yes" to questions, so change it to just
 ;; hitting the y key to confirm
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -95,6 +98,7 @@
 
 (use-package magit
   :ensure t
+  :diminish magit-auto-revert-mode
   :init (progn (global-auto-revert-mode 1)
                (setq auto-revert-verbose nil))
   :config (defvar magit-emacsclient-executable nil)
@@ -144,12 +148,15 @@
                                    (powerline-make-text "%-" powerline-color0)))))))))
 
 (use-package projectile :ensure t)
+
 (use-package helm-ls-git :ensure t)
+
 (use-package helm-projectile
   :ensure t
   :diminish projectile-mode)
+
 (use-package helm
-  :ensure
+  :ensure t
   :diminish helm-mode
   :bind (("C-c h" . helm-command-prefix)
          ("M-x" . helm-M-x)
@@ -259,8 +266,8 @@
              'auto-dim-other-buffers-face nil :background "gray15")))
 
 (use-package emmet-mode
-  :diminish emmet-mode
-  :ensure t)
+  :ensure t
+  :init (progn (add-hook 'web-mode-hook 'emmet-mode)))
 
 (use-package web-mode
   :ensure t
@@ -288,7 +295,7 @@
 ;; Setup multiple cursors
 (use-package multiple-cursors
   :ensure t
-  :diminish multiple-cursors-mode
+  :diminish multiple-cursors-mode "mc"
   :bind (("C-c C-s" . mc/mark-next-like-this)
          ("C-c C-S-S" . mc/mark-all-like-this)
          ("C-c C-n" . mc/mark-next-symbol-like-this)
