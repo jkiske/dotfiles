@@ -27,6 +27,10 @@ if [[ "$(uname)" == "Darwin" ]]; then
     export PATH="/opt/local/sbin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/heroku/bin"
     export PYTHONPATH="/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages:$PYTHONPATH"
     export DYLD_FALLBACK_LIBRARY_PATH="/opt/local/lib:/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
+    # iterm2 integration
+    if [[ -e "${HOME}/.iterm2_shell_integration.zsh" ]]; then
+        source "${HOME}/.iterm2_shell_integration.zsh"
+    fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     if [[ -e /opt/ros/jade ]]; then
         source /opt/ros/jade/setup.zsh
