@@ -41,9 +41,6 @@
 
 (set-cursor-color "salmon1")
 
-(diminish 'auto-fill-function)
-(diminish 'auto-revert-mode)
-
 ;; Nobody likes to have to type "yes" to questions, so change it to just
 ;; hitting the y key to confirm
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -246,6 +243,7 @@
 
 (use-package flycheck
   :ensure t
+  :diminish flycheck-mode
   :init (progn (add-hook 'python-mode-hook 'flycheck-mode)))
 
 (use-package py-autopep8
@@ -331,6 +329,16 @@
          ("C-M-r" . vr/isearch-backward)
          ("C-M-s" . vr/isearch-forward)))
 
+(use-package iy-go-to-char
+  :ensure t
+  :bind (("M-z" . iy-go-to-char)))
+
 (use-package google-c-style
   :ensure t
   :init (progn (add-hook 'c-mode-common-hook 'google-set-c-style) ))
+
+(use-package sudo-edit)
+(use-package nginx-mode)
+
+(diminish 'auto-fill-function)
+(diminish 'auto-revert-mode)
