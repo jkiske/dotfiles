@@ -37,8 +37,10 @@
 ;; Don't ding
 (global-set-key (kbd "RET") 'newline-and-indent)
 ;; Don't capitalize
-(global-unset-key "\M-u")
-
+(unbind-key "M-u")
+;; Don't do page up / page down
+(unbind-key (kbd "C-v"))
+(unbind-key (kbd "M-v"))
 (set-cursor-color "salmon1")
 
 ;; Nobody likes to have to type "yes" to questions, so change it to just
