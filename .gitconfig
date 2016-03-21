@@ -32,6 +32,9 @@
    c = commit
    lg = log --oneline --decorate --graph
    br = branch -av
+   sinit = submodule init
+   spull = submodule pull --recurse-submodules
+   supdate = submodule update --recursive
 
 [core]
    excludesfile = ~/.gitignore_global
