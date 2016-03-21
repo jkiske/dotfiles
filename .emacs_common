@@ -65,6 +65,11 @@
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 (global-set-key (kbd "C-x 4 t") 'transpose-buffers)
 
+(use-package auto-package-update
+  :ensure t
+  :config (progn (setq auto-package-update-interval 7)
+                 (setq auto-package-update-delete-old-versions t)))
+
 (use-package color-theme
   :ensure t)
 
@@ -203,6 +208,8 @@
                  (setq ac-show-menu-immediately-on-auto-complete t)
                  (setq ac-delay 0.1)
                  (bind-keys :map ac-complete-mode-map
+                            ([return] nil)
+                            ("\r" nil)
                             ("C-g" . ac-stop)
                             ("C-n" . ac-next)
                             ("C-p" . ac-previous))))
@@ -212,9 +219,9 @@
   :diminish git-gutter+-mode
   :bind (("M-g M-p" . git-gutter+-previous-hunk)
          ("M-g M-n" . git-gutter+-next-hunk))
-  :config (progn (global-git-gutter+-mode t)
-                 (add-hook 'git-gutter+:update-hooks
-                           'magit-revert-buffer-hook)))
+  :init (progn (global-git-gutter+-mode t)
+               (add-hook 'git-gutter+:update-hooks
+                         'magit-revert-buffer-hook)))
 
 (use-package cython-mode :ensure t)
 
@@ -295,11 +302,19 @@
 ;; Setup multiple cursors
 (use-package multiple-cursors
   :ensure t
-  :diminish multiple-cursors-mode "mc"
   :bind (("C-c C-s" . mc/mark-next-like-this)
          ("C-c C-S-S" . mc/mark-all-like-this)
          ("C-c C-n" . mc/mark-next-symbol-like-this)
          ("C-c C-p" . mc/ummark-next-like-this)))
+
+ (use-package visual-regexp-steroids
+  :ensure t
+  :bind (("C-c r" . vr/replace)
+         ("C-c q" . vr/query-replace)
+         ("C-c m" . vr/mc-mark)
+         ("C-M-r" . vr/isearch-backward)
+         ("C-M-s" . vr/isearch-forward)))
+
 
 ;; "undo" (and "redo") changes in the window configuration with the key
 ;; commands "C-c left" and "C-c right"
@@ -323,14 +338,6 @@
          ("\\.markdown\\'" . web-mode))
   :init (progn (setq markdown-command "pandoc --smart -f markdown -t html")))
 
-(use-package visual-regexp-steroids
-  :ensure t
-  :bind (("C-c r" . vr/replace)
-         ("C-c q" . vr/query-replace)
-         ("C-c m" . vr/mc-mark)
-         ("C-M-r" . vr/isearch-backward)
-         ("C-M-s" . vr/isearch-forward)))
-
 (use-package iy-go-to-char
   :ensure t
   :bind (("M-z" . iy-go-to-char)))
@@ -339,7 +346,9 @@
   :ensure t
   :init (progn (add-hook 'c-mode-common-hook 'google-set-c-style) ))
 
-(use-package sudo-edit)
+(use-package sudo-edit
+  :ensure t)
+
 (use-package nginx-mode)
 
 (diminish 'auto-fill-function)
