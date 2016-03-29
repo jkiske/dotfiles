@@ -29,16 +29,40 @@
 (require 'diminish)
 (require 'bind-key)
 
+(setq config "~/.emacs")
+(setq config_common "~/.emacs_common")
+(setq config_mac "~/.emacs_mac")
+(setq config_gui "~/.emacs_gui")
+
+;; Reload the config file
+(global-set-key (kbd "C-c e r")
+                (lambda () (interactive) (load-file config)))
+
+;; Open up config files
+(global-set-key (kbd "C-c e e")
+                (lambda () (interactive) (find-file config)))
+(global-set-key (kbd "C-c e c")
+                (lambda () (interactive) (find-file config_common)))
+(global-set-key (kbd "C-c e m")
+                (lambda () (interactive) (find-file config_mac)))
+(global-set-key (kbd "C-c e g")
+                (lambda () (interactive) (find-file config_gui)))
+
+(defun byte-recompile-init-files ()
+  "Recompile all of the startup files"
+  (interactive)
+  (byte-recompile-directory "~/.emacs.d" 0))
+
 ;; Load common files
-(load "~/.emacs_common")
+(load config_common)
 
 ;; When we are on a mac
 (when (eq system-type 'darwin)
-  (load "~/.emacs_mac"))
+  (load config_mac))
 
 ;; When we are using a GUI
 (when (display-graphic-p)
-  (load "~/.emacs_gui"))
+  (load config_gui))
 
 ;; Keep customize settings in their own file
 (setq custom-file "~/.emacs.d/custom.el")

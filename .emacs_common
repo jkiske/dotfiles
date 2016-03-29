@@ -36,6 +36,9 @@
 (global-set-key (kbd "C-x C-n") 'global-linum-mode)
 ;; Don't ding
 (global-set-key (kbd "RET") 'newline-and-indent)
+;; Clear the desktop
+(global-set-key (kbd "C-c d c") 'desktop-clear)
+
 ;; Don't capitalize
 (unbind-key "M-u")
 ;; Don't do page up / page down
@@ -64,23 +67,6 @@
         (select-window (funcall selector)))
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 (global-set-key (kbd "C-x 4 t") 'transpose-buffers)
-
-(defun reload-init-file()
-  "Reloads the .emacs file"
-  (interactive)
-  (load-file "~/.emacs"))
-(global-set-key (kbd "C-c e r") 'reload-init-file)
-
-(defun open-init-file ()
-  "Open the init file."
-  (interactive)
-  (find-file "~/.emacs"))
-(global-set-key (kbd "C-c e o") 'open-init-file)
-
-(defun byte-recompile-init-files ()
-  "Recompile all of the startup files"
-  (interactive)
-  (byte-recompile-directory "~/.emacs.d" 0))
 
 (use-package auto-package-update
   :ensure t
