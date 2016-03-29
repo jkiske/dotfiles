@@ -65,6 +65,23 @@
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 (global-set-key (kbd "C-x 4 t") 'transpose-buffers)
 
+(defun reload-init-file()
+  "Reloads the .emacs file"
+  (interactive)
+  (load-file "~/.emacs"))
+(global-set-key (kbd "C-c e r") 'reload-init-file)
+
+(defun open-init-file ()
+  "Open the init file."
+  (interactive)
+  (find-file "~/.emacs"))
+(global-set-key (kbd "C-c e o") 'open-init-file)
+
+(defun byte-recompile-init-files ()
+  "Recompile all of the startup files"
+  (interactive)
+  (byte-recompile-directory "~/.emacs.d" 0))
+
 (use-package auto-package-update
   :ensure t
   :config (progn (setq auto-package-update-interval 7)
@@ -223,7 +240,10 @@
                (add-hook 'git-gutter+:update-hooks
                          'magit-revert-buffer-hook)))
 
-(use-package cython-mode :ensure t)
+(use-package ein)
+
+(use-package cython-mode
+  :ensure t)
 
 (use-package jedi
   :ensure t
@@ -348,6 +368,11 @@
 
 (use-package sudo-edit
   :ensure t)
+
+(use-package which-key
+  :ensure t
+  :init (progn (which-key-mode)
+               (which-key-setup-side-window-bottom)))
 
 (use-package nginx-mode)
 
