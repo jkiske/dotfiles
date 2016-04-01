@@ -30,8 +30,6 @@
 (add-hook 'minibuffer-setup-hook
           (lambda () (setq truncate-lines nil)))
 
-;; Replaces white space with just one space
-(global-set-key (kbd "C-c C-SPC") 'just-one-space)
 ;; Line numbers
 (global-set-key (kbd "C-x C-n") 'global-linum-mode)
 ;; Don't ding
@@ -72,6 +70,11 @@
   :ensure t
   :config (progn (setq auto-package-update-interval 7)
                  (setq auto-package-update-delete-old-versions t)))
+
+;; Replaces white space with just one space
+(use-package shrink-whitespace
+  :ensure t
+  :bind (("C-c C-SPC" . shrink-whitespace)))
 
 (use-package color-theme
   :ensure t)
@@ -226,7 +229,8 @@
                (add-hook 'git-gutter+:update-hooks
                          'magit-revert-buffer-hook)))
 
-(use-package ein)
+(use-package ein
+  :ensure t)
 
 (use-package cython-mode
   :ensure t)
