@@ -36,17 +36,22 @@
 
 ;; Reload the config file
 (global-set-key (kbd "C-c e r")
-                (lambda () (interactive) (load-file config)))
+                (lambda () "Reload config file" (interactive)
+                  (load-file config)))
 
 ;; Open up config files
 (global-set-key (kbd "C-c e e")
-                (lambda () (interactive) (find-file config)))
+                (lambda () "Open .emacs file" (interactive)
+                  (find-file config)))
 (global-set-key (kbd "C-c e c")
-                (lambda () (interactive) (find-file config_common)))
+                (lambda () "Open .emacs common file" (interactive)
+                  (find-file config_common)))
 (global-set-key (kbd "C-c e m")
-                (lambda () (interactive) (find-file config_mac)))
+                (lambda () "Open .emacs mac file" (interactive)
+                  (find-file config_mac)))
 (global-set-key (kbd "C-c e g")
-                (lambda () (interactive) (find-file config_gui)))
+                (lambda () "Open emacs gui file" (interactive)
+                  (find-file config_gui)))
 
 (defun byte-recompile-init-files ()
   "Recompile all of the startup files"
