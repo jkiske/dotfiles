@@ -262,8 +262,7 @@
 
 (use-package flycheck
   :ensure t
-  :diminish flycheck-mode
-  :init (progn (add-hook 'python-mode-hook 'flycheck-mode)))
+  :diminish flycheck-mode)
 
 (use-package py-autopep8
   :ensure t
@@ -364,7 +363,15 @@
   :init (progn (which-key-mode)
                (which-key-setup-side-window-bottom)))
 
-(use-package nginx-mode)
+(use-package ace-jump-mode
+  :ensure t
+  :init (progn (ace-jump-mode-enable-mark-sync)
+               (setq ace-jump-mode-gray-background nil)
+               (setq ace-jump-mode-case-fold t))
+  :bind (("C-c j" . ace-jump-mode)))
+
+(use-package nginx-mode
+  :ensure t)
 
 (diminish 'auto-fill-function)
 (diminish 'auto-revert-mode)

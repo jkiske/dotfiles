@@ -33,8 +33,9 @@ elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     if [[ -e /opt/ros/jade ]]; then
         source /opt/ros/jade/setup.zsh
     fi
-    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/etc/arcanist/bin:$PATH"
+    export PATH="$HOME/driveai/infra/docker/driveai:/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/etc/arcanist/bin:$PATH"
     export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
 fi
 
 # Aliases
