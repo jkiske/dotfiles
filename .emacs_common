@@ -204,22 +204,16 @@
   :config (progn (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 ;; Simple autocomplete
-(use-package auto-complete
+(use-package company
   :ensure t
-  :diminish auto-complete-mode
-  :config (progn (require 'auto-complete-config)
-                 (auto-complete-mode 1)
-                 (ac-config-default)
-                 (setq ac-dwim t)
-                 (setq ac-show-menu-immediately-on-auto-complete t)
-                 (setq ac-delay 0.1)
-                 (bind-keys :map ac-complete-mode-map
-                            ([return] nil)
-                            ("\r" nil)
-                            ("C-g" . ac-stop)
-                            ("C-n" . ac-next)
-                            ("C-p" . ac-previous))))
+  :diminish company-mode
+  :config (progn (company-mode 1)
+                 (bind-keys :map company-active-map
+                            ("C-g" . company-abort)
+                            ("C-n" . company-select-next)
+                            ("C-p" . company-select-previous))))
 
+;; Show changes in the gutter
 (use-package git-gutter+
   :ensure t
   :diminish git-gutter+-mode
@@ -365,9 +359,9 @@
 
 (use-package ace-jump-mode
   :ensure t
-  :init (progn (ace-jump-mode-enable-mark-sync)
-               (setq ace-jump-mode-gray-background nil)
-               (setq ace-jump-mode-case-fold t))
+  :config (progn (ace-jump-mode-enable-mark-sync)
+                 (setq ace-jump-mode-gray-background nil)
+                 (setq ace-jump-mode-case-fold t))
   :bind (("C-c j" . ace-jump-mode)))
 
 (use-package nginx-mode

@@ -1,4 +1,6 @@
 ## Config oh-my-zsh
+ZDOTDIR="${HOME}/.zsh"
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -40,6 +42,7 @@ fi
 
 # Aliases
 alias donut="sudo mount -t nfs donut1:/donut /donut"
+alias fig="sudo mount -t nfs -o resvport fig1:/fig /fig"
 # Package 'common-aliases' makes rm = rm -i which is annoying
 unalias rm
 
@@ -58,9 +61,4 @@ if [[ -e "$HOME/.z" ]]; then
     export _Z_CMD="j"
     export _Z_DATA="$HOME/.z/z_data"
     source $HOME/.z/z.sh
-fi
-
-# Arcanist
-if [[ -d /etc/arcanist ]]; then
-    source /etc/arcanist/resources/shell/bash-completion
 fi
