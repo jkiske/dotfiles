@@ -16,7 +16,6 @@
 ;; Autowraps after 79 characters
 (setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 79)
-;; Clear all whitespace
 (setq ring-bell-function 'ignore)
 ;; Autosave files go to a temp folder
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
@@ -26,6 +25,7 @@
 (put 'upcase-region 'disabled nil)
 
 ;; Disable line wrapping in minibuffer
+;; Clear all whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'minibuffer-setup-hook
           (lambda () (setq truncate-lines nil)))
@@ -335,11 +335,15 @@
                                        :underline t :foreground zenburn-red
                                        :weight 'bold))))
 
+(defun turn-off-delete-trailing-whitespace ()
+  (remove-hook 'before-save-hook 'delete-trailing-whitespace))
 (use-package markdown-mode
   :ensure t
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . web-mode))
-  :init (progn (setq markdown-command "pandoc --smart -f markdown -t html")))
+  :init (progn (setq markdown-command "pandoc --smart -f markdown -t html")
+               (add-hook 'markdown-mode-hook
+                         'turn-off-delete-trailing-whitespace)))
 
 (use-package iy-go-to-char
   :ensure t
@@ -366,6 +370,11 @@
 
 (use-package nginx-mode
   :ensure t)
+
+;; https://github.com/sandstorm-io/capnproto/tree/master/highlighting/emacs
+(add-to-list 'load-path "~/.emacs.d/vendor/capnproto")
+(use-package capnp-mode
+  :mode (("\\.capnp\\'" . capnp-mode)))
 
 (diminish 'auto-fill-function)
 (diminish 'auto-revert-mode)

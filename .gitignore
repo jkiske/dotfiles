@@ -1,6 +1,12 @@
 # Ignore folders
-*/
+/*/
+
+# Ignore zsh data files
 .z/z_data*
+.zsh/.zcomp*
+
+# Emacs specific ignores
+*.elc
 
 # Don't ignore hidden folders
 !.*/
@@ -46,3 +52,4 @@
 /.zcompdump*
 /.zsh-update
 /.zsh_history
+/.eaglerc
