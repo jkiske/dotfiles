@@ -13,9 +13,9 @@
 (setq gc-cons-threshold 20000000)
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
-;; Autowraps after 79 characters
+;; Autowraps after 100 characters
 (setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 79)
+(setq-default fill-column 99)
 (setq ring-bell-function 'ignore)
 ;; Autosave files go to a temp folder
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
@@ -157,7 +157,9 @@
                                    (powerline-display-time 'right powerline-color0 powerline-color1)
                                    (powerline-make-text "%-" powerline-color0)))))))))
 
-(use-package projectile :ensure t)
+(use-package projectile
+  :ensure t
+  :config (progn (setq projectile-enable-caching t)))
 
 (use-package helm-ls-git :ensure t)
 
@@ -260,12 +262,13 @@
 
 (use-package py-autopep8
   :ensure t
-  :init (progn (setq py-autopep8-options '("--indent-size=2"))))
+  :init (progn (setq py-autopep8-options '("--indent-size=2"
+                                           "--max-line-length=100"))))
 
 (use-package column-marker
   :ensure t
   :init (progn (add-hook 'python-mode-hook
-                         (lambda () (interactive) (column-marker-1 80)))))
+                         (lambda () (interactive) (column-marker-1 100)))))
 
 (use-package auto-dim-other-buffers
   :ensure t
@@ -366,7 +369,7 @@
   :config (progn (ace-jump-mode-enable-mark-sync)
                  (setq ace-jump-mode-gray-background nil)
                  (setq ace-jump-mode-case-fold t))
-  :bind (("C-c j" . ace-jump-mode)))
+  :bind (("C-'" . ace-jump-mode)))
 
 (use-package nginx-mode
   :ensure t)
