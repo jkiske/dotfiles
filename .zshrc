@@ -10,6 +10,14 @@ ZSH_THEME="kiske"
 # Change the defult custom folder $ZSH/custom?
 ZSH_CUSTOM=$HOME/.zsh/custom
 
+# bazel autocomplete
+if [[ -e "$HOME/.zsh/completion/" ]]; then
+    fpath[1,0]=~/.zsh/completion/
+fi
+
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
 plugins=(
     common-aliases
     git-extras
@@ -35,7 +43,7 @@ elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     if [[ -e /opt/ros/jade ]]; then
         source /opt/ros/jade/setup.zsh
     fi
-    export PATH="$HOME/driveai/infra/docker/driveai:/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/etc/arcanist/bin:$PATH"
+    export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
     export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
     export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
 fi
