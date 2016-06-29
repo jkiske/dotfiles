@@ -176,6 +176,7 @@
          ("C-x C-d" . helm-browse-project)
          ("C-x b" . helm-mini)
          ("C-x C-b" . helm-buffers-list)
+         ("C-c s" . helm-projectile-ag)
          ("M-y" . helm-show-kill-ring)
          ("C-y" . yank))
   :init (progn (require 'helm-config)
