@@ -31,10 +31,6 @@
 
 (setq system-uses-terminfo nil)
 
-(set-face-attribute 'default nil
-                    :family "Hack"
-                    :weight 'normal)
-
 (defun create-tags (dir-name)
   (interactive "DDirectory: ")
   (eshell-command

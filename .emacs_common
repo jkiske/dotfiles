@@ -29,6 +29,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'minibuffer-setup-hook
           (lambda () (setq truncate-lines nil)))
+(set-face-attribute 'default nil :family "Hack" :weight 'normal)
 
 ;; Line numbers
 (global-set-key (kbd "C-x C-n") 'global-linum-mode)
