@@ -2,6 +2,20 @@
 
 ;; Save the open windows
 (desktop-save-mode 1)
+(defun emacs-process-p (pid)
+  "If pid is the process ID of an emacs process, return t, else nil. Also returns nil if pid is nil."
+  (when pid
+    (let ((attributes (process-attributes pid)) (cmd))
+      (dolist (attr attributes)
+        (if (string= "comm" (car attr))
+            (setq cmd (cdr attr))))
+      (if (and cmd (or (string= "emacs" cmd) (string= "emacs.exe" cmd))) t))))
+
+(defadvice desktop-owner (after pry-from-cold-dead-hands activate)
+  "Don't allow dead emacs to own the desktop file."
+  (when (not (emacs-process-p ad-return-value))
+    (setq ad-return-value nil)))
+
 ;; No menu-bar
 (menu-bar-mode -1)
 ;; Always show column numbers
@@ -23,6 +37,8 @@
 ;; Don't give a scratch buffer message
 (setq initial-scratch-message "")
 (put 'upcase-region 'disabled nil)
+;; Don't ask to confirm creating a file
+(setq confirm-nonexistent-file-or-buffer nil)
 
 ;; Disable line wrapping in minibuffer
 ;; Clear all whitespace
@@ -164,6 +180,8 @@
 
 (use-package helm-ls-git :ensure t)
 
+(use-package helm-ag :ensure t)
+
 (use-package helm-projectile
   :ensure t
   :diminish projectile-mode)
@@ -216,7 +234,6 @@
                             ("C-g" . company-abort)
                             ("C-n" . company-select-next)
                             ("C-p" . company-select-previous))))
-
 ;; Show changes in the gutter
 (use-package git-gutter+
   :ensure t
@@ -243,7 +260,9 @@
           (setq tab-width 2)
           (setq python-indent-offset 2)
           (when (executable-find "ipython")
-            (setq python-shell-interpreter "ipython")))
+          (setq jedi:server-args
+                '("--sys-path" "/home/jeff/otto"))
+          (setq python-shell-interpreter "ipython")))
   :config (progn
             (setq jedi:complete-on-dot t)
             (setq jedi:tooltip-method '(pos-tip))
