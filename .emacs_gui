@@ -17,4 +17,4 @@
          ("s-_" . zoom-frm-out)
          ("s-0" . zoom-frm-unzoom)))
 
-(setq frame-title-format "%*%b")
+(setq frame-title-format "%*%f")

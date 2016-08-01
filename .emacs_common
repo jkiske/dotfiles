@@ -2,6 +2,13 @@
 
 ;; Save the open windows
 (desktop-save-mode 1)
+(setq desktop-restore-eager 5)
+(savehist-mode 1)
+
+;; Keep track of 100 recent files
+(recentf-mode 1)
+(setq recentf-max-menu-items 100)
+
 (defun emacs-process-p (pid)
   "If pid is the process ID of an emacs process, return t, else nil. Also returns nil if pid is nil."
   (when pid
@@ -149,7 +156,7 @@
     (zenburn-with-color-variables
       (set-face-attribute 'mode-line nil
                           :foreground "#030303"
-                          :background zenburn-green+4
+                          :background zenburn-blue-1
                           :box nil)
       (set-face-attribute 'mode-line-inactive nil
                           :foreground "#f9f9f9"
@@ -228,12 +235,12 @@
 ;; Simple autocomplete
 (use-package company
   :ensure t
-  :diminish company-mode
   :config (progn (company-mode 1)
                  (bind-keys :map company-active-map
                             ("C-g" . company-abort)
                             ("C-n" . company-select-next)
                             ("C-p" . company-select-previous))))
+
 ;; Show changes in the gutter
 (use-package git-gutter+
   :ensure t
@@ -251,7 +258,9 @@
   :ensure t)
 
 (use-package jedi
-  :ensure t
+  :ensure jedi-core
+  :ensure company-jedi
+  :mode "\\.py$"
   :init (progn
           (add-hook 'python-mode-hook 'jedi:setup)
           (setq indent-tabs-mode nil tab-width 2)
@@ -264,14 +273,16 @@
                 '("--sys-path" "/home/jeff/otto"))
           (setq python-shell-interpreter "ipython")))
   :config (progn
+            (add-to-list 'company-backends 'company-jedi)
             (setq jedi:complete-on-dot t)
             (setq jedi:tooltip-method '(pos-tip))
             (set (make-local-variable 'ac-max-width) 0.5)
             (bind-keys :map jedi-mode-map
+                       ("C-<tab>" . jedi:complete)
                        ("M-." . jedi:goto-definition)
                        ("M-," . jedi:goto-definition-pop-marker)
                        ("M-/" . jedi:show-doc)
-                       ("M-?" . jedi:get-in-function-call)
+                       ("M-?" . helm-jedi-related-names)
                        ("<backtab>" . python-indent-dedent-line-backspace)
                        ("C-c C-c" .
                         (lambda () (interactive)
