@@ -13,55 +13,8 @@ ZSH_CUSTOM=$HOME/.zsh/custom
 # bazel autocomplete
 if [[ -e "$HOME/.zsh/completion/" ]]; then
     fpath[1,0]=~/.zsh/completion/
-fi
-
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
-
-plugins=(
-    common-aliases
-    git-extras
-    macports
-    osx
-    pip
-    python
-    terminalapp
-    git
-    web-search
-)
-source $ZSH/oh-my-zsh.sh
-
-export TERM=xterm-256color
-
-### User configuration
-## Platform
-if [[ "$(uname)" == "Darwin" ]]; then
-    export PATH="/opt/local/sbin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/heroku/bin"
-    export PYTHONPATH="/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages:$PYTHONPATH"
-    export DYLD_FALLBACK_LIBRARY_PATH="/opt/local/lib:/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
-elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    if [[ -e /opt/ros/jade ]]; then
-        source /opt/ros/jade/setup.zsh
-    fi
-    export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-    export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
-    export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
-fi
-
-# Aliases
-alias donut="sudo mount -t nfs donut1:/donut /donut"
-alias fig="sudo mount -t nfs -o resvport fig1:/fig /fig"
-# Package 'common-aliases' makes rm = rm -i which is annoying
-unalias rm
-
-# Emacs
-EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
-if [[ ! -e $EMACS_OSX ]]; then
-    export EDITOR="$EMACS_OSX -nw --no-desktop -q"
-else
-    export EDITOR="$EMACS_OSX -nw --no-desktop"
-    alias em=$EMACS_OSX
-    alias emacs=$EMACS_OSX
+    zstyle ':completion:*' use-cache on
+    zstyle ':completion:*' cache-path ~/.zsh/cache
 fi
 
 # z autocomplete
@@ -70,3 +23,32 @@ if [[ -e "$HOME/.z" ]]; then
     export _Z_DATA="$HOME/.z/z_data"
     source $HOME/.z/z.sh
 fi
+
+export TERM=xterm-256color
+
+plugins=(common-aliases git git-extras pip python)
+
+### User configuration
+## Platform
+if [[ "$(uname)" == "Darwin" ]]; then
+    export PATH="/opt/local/sbin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin"
+    export PYTHONPATH="/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages:$PYTHONPATH"
+    export DYLD_FALLBACK_LIBRARY_PATH="/opt/local/lib:/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
+    EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
+    if [[ -e $EMACS_OSX ]]; then
+        export EDITOR="$EMACS_OSX -nw --no-desktop"
+        alias em=$EMACS_OSX
+        alias emacs=$EMACS_OSX
+    fi
+    plugins+=(macports osx)
+elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
+    export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+    export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+    export EDITOR="emacs -nw -Q"
+fi
+
+source $ZSH/oh-my-zsh.sh
+
+# Package 'common-aliases' makes rm = rm -i which is annoying
+unalias rm
