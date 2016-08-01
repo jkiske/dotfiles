@@ -260,7 +260,6 @@
 (use-package jedi
   :ensure jedi-core
   :ensure company-jedi
-  :mode "\\.py$"
   :init (progn
           (add-hook 'python-mode-hook 'jedi:setup)
           (setq indent-tabs-mode nil tab-width 2)
@@ -276,7 +275,6 @@
             (add-to-list 'company-backends 'company-jedi)
             (setq jedi:complete-on-dot t)
             (setq jedi:tooltip-method '(pos-tip))
-            (set (make-local-variable 'ac-max-width) 0.5)
             (bind-keys :map jedi-mode-map
                        ("C-<tab>" . jedi:complete)
                        ("M-." . jedi:goto-definition)

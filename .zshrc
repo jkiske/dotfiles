@@ -57,7 +57,7 @@ unalias rm
 # Emacs
 EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
 if [[ ! -e $EMACS_OSX ]]; then
-    export EDITOR="emacs -nw"
+    export EDITOR="$EMACS_OSX -nw --no-desktop -q"
 else
     export EDITOR="$EMACS_OSX -nw --no-desktop"
     alias em=$EMACS_OSX
