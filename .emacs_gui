@@ -17,4 +17,10 @@
          ("s-_" . zoom-frm-out)
          ("s-0" . zoom-frm-unzoom)))
 
-(setq frame-title-format "%*%f")
+(setq frame-title-format
+      '((:eval (if (buffer-modified-p)
+                   "*"))
+        (:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name)) "%b"))
+        (:eval (if (buffer-modified-p)
+                   "*"))))

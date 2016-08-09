@@ -232,14 +232,51 @@
   :ensure t
   :config (progn (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
-;; Simple autocomplete
+(use-package python-mode
+  :ensure t
+  :mode ("\\.py$" . python-mode)
+  :init (progn
+          (setq indent-tabs-mode nil tab-width 2)
+          (setq py-indent-offset 2)
+          (setq tab-width 2)
+          (setq python-indent-offset 2))
+  :config (bind-keys :map python-mode-map
+                     ("<backtab>" . python-indent-dedent-line-backspace)))
+
 (use-package company
   :ensure t
-  :config (progn (company-mode 1)
-                 (bind-keys :map company-active-map
-                            ("C-g" . company-abort)
-                            ("C-n" . company-select-next)
-                            ("C-p" . company-select-previous))))
+  :init (progn (global-company-mode 1)
+               (bind-keys :map company-active-map
+                          ("C-g" . company-abort)
+                          ("C-n" . company-select-next)
+                          ("C-p" . company-select-previous))))
+
+(use-package company-jedi
+  :ensure t
+  :ensure jedi-core
+  :init (progn (add-hook 'python-mode-hook 'jedi:setup)
+               (add-to-list 'company-backends 'company-jedi)
+               (setq jedi:complete-on-dot t)
+               (setq jedi:tooltip-method '(pos-tip))
+               (setq jedi:server-args '("--sys-path" "/home/jeff/otto")))
+  :config (progn (bind-keys :map jedi-mode-map
+                            ("C-<tab>" . jedi:complete)
+                            ("M-." . jedi:goto-definition)
+                            ("M-," . jedi:goto-definition-pop-marker)
+                            ("M-/" . jedi:show-doc)
+                            ("M-?" . helm-jedi-related-names))))
+
+(use-package cython-mode
+  :ensure t)
+
+(use-package py-autopep8
+  :ensure t
+  :init (progn (setq py-autopep8-options '("--indent-size=2"
+                                           "--max-line-length=100"))))
+(use-package column-marker
+  :ensure t
+  :init (progn (add-hook 'python-mode-hook
+                         (lambda () (interactive) (column-marker-1 100)))))
 
 ;; Show changes in the gutter
 (use-package git-gutter+
@@ -251,62 +288,9 @@
                (add-hook 'git-gutter+:update-hooks
                          'magit-revert-buffer-hook)))
 
-(use-package ein
-  :ensure t)
-
-(use-package cython-mode
-  :ensure t)
-
-(use-package jedi
-  :ensure jedi-core
-  :ensure company-jedi
-  :init (progn
-          (add-hook 'python-mode-hook 'jedi:setup)
-          (setq indent-tabs-mode nil tab-width 2)
-          (setq indent-tabs-mode nil)
-          (setq py-indent-offset 2)
-          (setq tab-width 2)
-          (setq python-indent-offset 2)
-          (when (executable-find "ipython")
-          (setq jedi:server-args
-                '("--sys-path" "/home/jeff/otto"))
-          (setq python-shell-interpreter "ipython")))
-  :config (progn
-            (add-to-list 'company-backends 'company-jedi)
-            (setq jedi:complete-on-dot t)
-            (setq jedi:tooltip-method '(pos-tip))
-            (bind-keys :map jedi-mode-map
-                       ("C-<tab>" . jedi:complete)
-                       ("M-." . jedi:goto-definition)
-                       ("M-," . jedi:goto-definition-pop-marker)
-                       ("M-/" . jedi:show-doc)
-                       ("M-?" . helm-jedi-related-names)
-                       ("<backtab>" . python-indent-dedent-line-backspace)
-                       ("C-c C-c" .
-                        (lambda () (interactive)
-                          (python-shell-send-buffer t))))))
-
 (use-package flycheck
   :ensure t
   :diminish flycheck-mode)
-
-(use-package py-autopep8
-  :ensure t
-  :init (progn (setq py-autopep8-options '("--indent-size=2"
-                                           "--max-line-length=100"))))
-
-(use-package column-marker
-  :ensure t
-  :init (progn (add-hook 'python-mode-hook
-                         (lambda () (interactive) (column-marker-1 100)))))
-
-(use-package auto-dim-other-buffers
-  :ensure t
-  :diminish auto-dim-other-buffers-mode
-  :config (progn
-            (auto-dim-other-buffers-mode t)
-            (set-face-attribute
-             'auto-dim-other-buffers-face nil :background "gray15")))
 
 (use-package emmet-mode
   :ensure t
@@ -334,6 +318,14 @@
                        ("C-;" . web-mode-comment-or-uncomment))
             (unbind-key "C-c C-s" web-mode-map)
             (unbind-key "C-c C-n" web-mode-map)))
+
+(use-package auto-dim-other-buffers
+  :ensure t
+  :diminish auto-dim-other-buffers-mode
+  :config (progn
+            (auto-dim-other-buffers-mode t)
+            (set-face-attribute
+             'auto-dim-other-buffers-face nil :background "gray15")))
 
 ;; Setup multiple cursors
 (use-package multiple-cursors
@@ -391,6 +383,7 @@
 
 (use-package which-key
   :ensure t
+  :diminish which-key-mode
   :init (progn (which-key-mode)
                (which-key-setup-side-window-bottom)))
 
@@ -411,3 +404,4 @@
 
 (diminish 'auto-fill-function)
 (diminish 'auto-revert-mode)
+(diminish 'outline-minor-mode)
