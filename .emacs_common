@@ -2,7 +2,7 @@
 
 ;; Save the open windows
 (desktop-save-mode 1)
-(setq desktop-restore-eager 5)
+(setq desktop-restore-eager 10)
 (savehist-mode 1)
 
 ;; Keep track of 100 recent files
@@ -232,17 +232,6 @@
   :ensure t
   :config (progn (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
-(use-package python-mode
-  :ensure t
-  :mode ("\\.py$" . python-mode)
-  :init (progn
-          (setq indent-tabs-mode nil tab-width 2)
-          (setq py-indent-offset 2)
-          (setq tab-width 2)
-          (setq python-indent-offset 2))
-  :config (bind-keys :map python-mode-map
-                     ("<backtab>" . python-indent-dedent-line-backspace)))
-
 (use-package company
   :ensure t
   :init (progn (global-company-mode 1)
@@ -266,17 +255,44 @@
                             ("M-/" . jedi:show-doc)
                             ("M-?" . helm-jedi-related-names))))
 
-(use-package cython-mode
-  :ensure t)
+(use-package sphinx-doc
+  :ensure t
+  :ensure python-docstring
+  :diminish sphinx-doc-mode
+  :diminish python-docstring-mode
+  :init (progn (add-hook 'python-mode-hook (lambda ()
+                                             (sphinx-doc-mode t) (python-docstring-mode t))))
+  :config (bind-keys :map sphinx-doc-mode-map
+                     ("M-p M-d" . sphinx-doc)))
 
 (use-package py-autopep8
   :ensure t
+  :ensure py-isort
   :init (progn (setq py-autopep8-options '("--indent-size=2"
-                                           "--max-line-length=100"))))
+                                           "--max-line-length=100"))
+               (setq py-isort-options '("--lines=100"))))
+
+(use-package cython-mode
+  :mode ("\\.pyx$" . cython-mode)
+  :ensure t)
+
 (use-package column-marker
   :ensure t
   :init (progn (add-hook 'python-mode-hook
                          (lambda () (interactive) (column-marker-1 100)))))
+
+(use-package python
+  :ensure t
+  :mode ("\\.py$" . python-mode)
+  :init (progn
+          (setq indent-tabs-mode nil tab-width 2)
+          (setq py-indent-offset 2)
+          (setq tab-width 2)
+          (setq python-indent-offset 2))
+  :config (progn (bind-keys :map python-mode-map
+                            ("<backtab>" . python-indent-dedent-line-backspace)
+                            ("M-p M-c" . (lambda() (interactive)
+                                           (py-autopep8-buffer) (py-isort-buffer))))))
 
 ;; Show changes in the gutter
 (use-package git-gutter+

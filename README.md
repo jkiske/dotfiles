@@ -15,7 +15,7 @@ sudo apt-get install emacs24 emacs24-el emacs24-common-non-dfsg
 ## Python
 <pre>
 sudo apt-get install python-pip3 python-pip
-sudo -H pip install jedi virtualenv
+sudo -H pip3 install jedi virtualenv isort
 emacs --batch -l ~/.emacs --eval "(jedi:install-server)"
 </pre>
 
