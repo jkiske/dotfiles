@@ -185,9 +185,11 @@
   :ensure t
   :config (progn (setq projectile-enable-caching t)))
 
-(use-package helm-ls-git :ensure t)
+(use-package helm-ls-git
+  :ensure t)
 
-(use-package helm-ag :ensure t)
+(use-package helm-ag
+  :ensure t)
 
 (use-package helm-projectile
   :ensure t
@@ -204,12 +206,12 @@
          ("C-x C-b" . helm-buffers-list)
          ("C-c s" . helm-projectile-ag)
          ("M-y" . helm-show-kill-ring)
-         ("C-y" . yank))
+         ("C-y" . yank)
+         :map helm-map
+         ("<tab>" . helm-execute-persistent-action)
+         ("C-i" . helm-execute-persistent-action)
+         ("C-z" . helm-select-action))
   :init (progn (require 'helm-config)
-               (bind-keys :map helm-map
-                          ("<tab>" . helm-execute-persistent-action)
-                          ("C-i" . helm-execute-persistent-action)
-                          ("C-z" . helm-select-action))
                (unbind-key (kbd "C-x c"))
                (setq helm-mode-fuzzy-match 1)
                (setq helm-completion-in-region-fuzzy-match 1)
@@ -234,11 +236,11 @@
 
 (use-package company
   :ensure t
-  :init (progn (global-company-mode 1)
-               (bind-keys :map company-active-map
-                          ("C-g" . company-abort)
-                          ("C-n" . company-select-next)
-                          ("C-p" . company-select-previous))))
+  :init (progn (global-company-mode 1))
+  :bind (:map company-active-map
+              ("C-g" . company-abort)
+              ("C-n" . company-select-next)
+              ("C-p" . company-select-previous)))
 
 (use-package company-jedi
   :ensure t
@@ -248,12 +250,12 @@
                (setq jedi:complete-on-dot t)
                (setq jedi:tooltip-method '(pos-tip))
                (setq jedi:server-args '("--sys-path" "/home/jeff/otto")))
-  :config (progn (bind-keys :map jedi-mode-map
-                            ("C-<tab>" . jedi:complete)
-                            ("M-." . jedi:goto-definition)
-                            ("M-," . jedi:goto-definition-pop-marker)
-                            ("M-/" . jedi:show-doc)
-                            ("M-?" . helm-jedi-related-names))))
+  :bind (:map jedi-mode-map
+              ("C-<tab>" . jedi:complete)
+              ("M-." . jedi:goto-definition)
+              ("M-," . jedi:goto-definition-pop-marker)
+              ("M-/" . jedi:show-doc)
+              ("M-?" . helm-jedi-related-names)))
 
 (use-package sphinx-doc
   :ensure t
@@ -262,8 +264,8 @@
   :diminish python-docstring-mode
   :init (progn (add-hook 'python-mode-hook (lambda ()
                                              (sphinx-doc-mode t) (python-docstring-mode t))))
-  :config (bind-keys :map sphinx-doc-mode-map
-                     ("M-p M-d" . sphinx-doc)))
+  :bind (:map sphinx-doc-mode-map
+              ("M-p M-d" . sphinx-doc)))
 
 (use-package py-autopep8
   :ensure t
@@ -283,16 +285,17 @@
 
 (use-package python
   :ensure t
+  :preface (defun py-cleanup ()
+             (interactive) (py-autopep8-buffer) (py-isort-buffer))
   :mode ("\\.py$" . python-mode)
   :init (progn
           (setq indent-tabs-mode nil tab-width 2)
           (setq py-indent-offset 2)
           (setq tab-width 2)
           (setq python-indent-offset 2))
-  :config (progn (bind-keys :map python-mode-map
-                            ("<backtab>" . python-indent-dedent-line-backspace)
-                            ("M-p M-c" . (lambda() (interactive)
-                                           (py-autopep8-buffer) (py-isort-buffer))))))
+  :bind (:map python-mode-map
+              ("<backtab>" . python-indent-dedent-line-backspace)
+              ("M-p M-c" . py-cleanup)))
 
 ;; Show changes in the gutter
 (use-package git-gutter+
@@ -330,10 +333,10 @@
             (setq web-mode-code-indent-offset 2)
             (setq web-mode-enable-current-column-highlight t)
             (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
-            (bind-keys :map ac-menu-map
-                       ("C-;" . web-mode-comment-or-uncomment))
             (unbind-key "C-c C-s" web-mode-map)
-            (unbind-key "C-c C-n" web-mode-map)))
+            (unbind-key "C-c C-n" web-mode-map))
+  :bind (:map ac-menu-map
+              ("C-;" . web-mode-comment-or-uncomment)))
 
 (use-package auto-dim-other-buffers
   :ensure t
@@ -351,7 +354,7 @@
          ("C-c C-n" . mc/mark-next-symbol-like-this)
          ("C-c C-p" . mc/ummark-next-like-this)))
 
- (use-package visual-regexp-steroids
+(use-package visual-regexp-steroids
   :ensure t
   :bind (("C-c r" . vr/replace)
          ("C-c q" . vr/query-replace)
