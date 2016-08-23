@@ -236,11 +236,22 @@
 
 (use-package company
   :ensure t
+  :ensure company-statistics
   :init (progn (global-company-mode 1))
+  :config (progn (company-statistics-mode)
+                 (setq company-idle-delay 0.3)
+                 (setq company-minimum-prefix-length 2)
+                 (setq company-dabbrev-downcase nil))
   :bind (:map company-active-map
               ("C-g" . company-abort)
               ("C-n" . company-select-next)
               ("C-p" . company-select-previous)))
+
+(use-package yasnippet
+  :ensure t
+  :init (yas-global-mode 1)
+  :config (progn (add-to-list 'company-backends 'company-yasnippet))
+  :bind (("C-c C-y" . company-yasnippet)))
 
 (use-package company-jedi
   :ensure t
