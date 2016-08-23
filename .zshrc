@@ -52,3 +52,5 @@ source $ZSH/oh-my-zsh.sh
 
 # Package 'common-aliases' makes rm = rm -i which is annoying
 unalias rm
+# Bazel breaks with this
+unalias '...'
