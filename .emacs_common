@@ -350,7 +350,7 @@
             (unbind-key "C-c C-s" web-mode-map)
             (unbind-key "C-c C-n" web-mode-map))
   :bind (:map ac-menu-map
-              ("C-;" . web-mode-comment-or-uncomment)))
+              ("M-;" . web-mode-comment-or-uncomment)))
 
 (use-package auto-dim-other-buffers
   :ensure t
@@ -425,7 +425,7 @@
   :config (progn (ace-jump-mode-enable-mark-sync)
                  (setq ace-jump-mode-gray-background nil)
                  (setq ace-jump-mode-case-fold t))
-  :bind (("C-'" . ace-jump-mode)))
+  :bind (("C-;" . ace-jump-mode)))
 
 (use-package nginx-mode
   :ensure t)
