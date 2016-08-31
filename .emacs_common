@@ -116,19 +116,17 @@
 ;; Calm down minor modes
 (use-package diminish :ensure t)
 
-(use-package paren
+(use-package rainbow-delimiters
   :ensure t
+  :ensure paren
   :config (progn (show-paren-mode 1)
                  (setq show-paren-delay 0)
-                 (set-face-background 'show-paren-match
-                                      (face-background 'default))
-                 (set-face-foreground 'show-paren-match "#def")
-                 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-                 (set-face-attribute 'show-paren-match nil :underline t)
-                 (set-face-background 'show-paren-mismatch
-                                      (face-background 'default))
-                 (set-face-foreground 'show-paren-mismatch "red")
-                 (set-face-attribute 'show-paren-mismatch nil :underline t)))
+                 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+                 (zenburn-with-color-variables
+                   (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+                                       :background zenburn-red :foreground nil :weight 'bold)
+                   (set-face-attribute 'show-paren-match nil
+                                       :background nil :foreground nil :weight 'bold :underline t))))
 
 (use-package magit
   :ensure t
@@ -229,10 +227,6 @@
 (use-package redo+
   :ensure t
   :bind (("C-?" . redo)))
-
-(use-package rainbow-delimiters
-  :ensure t
-  :config (progn (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package company
   :ensure t
