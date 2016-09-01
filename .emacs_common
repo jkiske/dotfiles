@@ -317,7 +317,9 @@
 
 (use-package flycheck
   :ensure t
-  :diminish flycheck-mode)
+  :diminish flycheck-mode
+  :init (progn (add-hook 'python-mode-hook #'flycheck-mode))
+  :config (progn (setq flycheck-pylint-use-symbolic-id nil)))
 
 (use-package emmet-mode
   :ensure t
