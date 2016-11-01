@@ -42,9 +42,9 @@ if [[ "$(uname)" == "Darwin" ]]; then
     fi
     plugins+=(macports osx)
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
     export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
-    export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+    export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+    export LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH"
     export EDITOR="emacs -nw -Q"
 fi
 

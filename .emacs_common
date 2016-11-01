@@ -63,7 +63,10 @@
 
 ;; Don't capitalize
 (unbind-key "M-u")
+;; Don't allow overwrite mode
 (unbind-key [(insert)])
+;; Don't send mail
+(unbind-key (kbd "C-x m"))
 
 ;; Don't do page up / page down
 (unbind-key (kbd "C-v"))
@@ -263,7 +266,7 @@
                (setq jedi:server-args '("--sys-path" "/home/jeff/otto"
                                         "--sys-path" "/home/jeff/backstop")))
   :bind (:map jedi-mode-map
-              ("C-<tab>" . jedi:complete)
+              ("C-<tab>" . company-jedi)
               ("M-." . jedi:goto-definition)
               ("M-," . jedi:goto-definition-pop-marker)
               ("M-/" . jedi:show-doc)
