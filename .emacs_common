@@ -143,9 +143,9 @@
          ("M-g M-c" . magit-commit)
          ("M-g M-d" . magit-diff-unstaged)))
 
-;; https://github.com/jonathanchu/emacs-powerline
-(add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
 (use-package powerline
+  ;; https://github.com/jonathanchu/emacs-powerline
+  :load-path "~/.emacs.d/vendor/emacs-powerline"
   :config
   (progn
     (defvar powerline-color0)
@@ -263,8 +263,14 @@
                (add-to-list 'company-backends 'company-jedi)
                (setq jedi:complete-on-dot t)
                (setq jedi:tooltip-method '(pos-tip))
-               (setq jedi:server-args '("--sys-path" "/home/jeff/otto"
-                                        "--sys-path" "/home/jeff/backstop")))
+               (setq jedi:server-args `("--sys-path" ,(substitute-in-file-name
+                                                       "$HOME/otto")
+                                        "--sys-path" ,(substitute-in-file-name
+                                                      "$HOME/tensorflow-experiments")
+                                        "--sys-path" ,(substitute-in-file-name
+                                                      "$HOME/.conda/envs/py27/lib/python2.7/site-packages/")
+                                        "--sys-path" ,(substitute-in-file-name
+                                                      "$HOME/.conda/envs/py27/lib/python2.7/site-packages/"))))
   :bind (:map jedi-mode-map
               ("C-<tab>" . company-jedi)
               ("M-." . jedi:goto-definition)
@@ -282,12 +288,25 @@
   :bind (:map sphinx-doc-mode-map
               ("M-p M-d" . sphinx-doc)))
 
+(use-package flycheck-virtualenv
+  :load-path "~/.emacs.d/vendor/flycheck-pyvenv"
+  :after python
+  :commands (flycheck-virtualenv-setup)
+  :config (add-hook 'python-mode-hook #'flycheck-virtualenv-setup))
+
+(use-package pyvenv
+  :ensure t
+  :after python
+  ;; :init (progn `(setenv "WORKON_HOME" ,(substitute-in-file-name "$HOME/.conda/"))
+  :init (progn (setenv "WORKON_HOME" "/home/kiske/.conda/")
+               (add-hook 'python-mode-hook 'pyvenv-mode)))
+
 (use-package py-autopep8
   :ensure t
   :ensure py-isort
-  :init (progn (setq py-autopep8-options '("--indent-size=2"
-                                           "--max-line-length=100"))
-               (setq py-isort-options '("--lines=100"))))
+  :init (progn (setq py-autopep8-options '("--indent-size=4"
+                                           "--max-line-length=101"))
+               (setq py-isort-options '("--lines=101"))))
 
 (use-package cython-mode
   :mode ("\\.pyx$" . cython-mode)
@@ -434,8 +453,8 @@
   :ensure t)
 
 ;; https://github.com/sandstorm-io/capnproto/tree/master/highlighting/emacs
-(add-to-list 'load-path "~/.emacs.d/vendor/capnproto")
 (use-package capnp-mode
+  :load-path "~/.emacs.d/vendor/capnproto"
   :mode (("\\.capnp\\'" . capnp-mode)))
 
 (use-package modern-cpp-font-lock
