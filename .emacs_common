@@ -263,14 +263,10 @@
                (add-to-list 'company-backends 'company-jedi)
                (setq jedi:complete-on-dot t)
                (setq jedi:tooltip-method '(pos-tip))
-               (setq jedi:server-args `("--sys-path" ,(substitute-in-file-name
-                                                       "$HOME/otto")
-                                        "--sys-path" ,(substitute-in-file-name
-                                                      "$HOME/tensorflow-experiments")
-                                        "--sys-path" ,(substitute-in-file-name
-                                                      "$HOME/.conda/envs/py27/lib/python2.7/site-packages/")
-                                        "--sys-path" ,(substitute-in-file-name
-                                                      "$HOME/.conda/envs/py27/lib/python2.7/site-packages/"))))
+               (setq jedi:server-args '("--sys-path" "~/otto"
+                                        "--sys-path" "~/tensorflow-experiments"
+                                        "--virtual-env" "/etc/miniconda3/envs/py27"
+                                        "--virtual-env" "/etc/miniconda3/envs/py35/")))
   :bind (:map jedi-mode-map
               ("C-<tab>" . company-jedi)
               ("M-." . jedi:goto-definition)
@@ -315,7 +311,7 @@
 (use-package column-marker
   :ensure t
   :init (progn (add-hook 'python-mode-hook
-                         (lambda () (interactive) (column-marker-1 100)))))
+                         (lambda () (interactive) (column-marker-1 101)))))
 
 (use-package python
   :ensure t
