@@ -31,16 +31,14 @@ plugins=(common-aliases git git-extras pip python)
 ### User configuration
 ## Platform
 if [[ "$(uname)" == "Darwin" ]]; then
-    export PATH="/opt/local/sbin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin"
-    export PYTHONPATH="/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages:$PYTHONPATH"
-    export DYLD_FALLBACK_LIBRARY_PATH="/opt/local/lib:/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
-    EMACS_OSX='/Applications/Emacs.app/Contents/MacOS/Emacs'
+    export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
+    EMACS_OSX='/Applications/Emacs/Emacs.app/Contents/MacOS/Emacs'
     if [[ -e $EMACS_OSX ]]; then
         export EDITOR="$EMACS_OSX -nw --no-desktop"
         alias em=$EMACS_OSX
         alias emacs=$EMACS_OSX
     fi
-    plugins+=(macports osx)
+    plugins+=(brew osx)
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
     export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/etc/miniconda3/bin:$PATH"
