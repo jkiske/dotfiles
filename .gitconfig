@@ -1,47 +1,49 @@
 [color]
-  branch = auto
-  diff = auto
-  status = auto
+    branch = auto
+    diff = auto
+    status = auto
 
 [color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
+    current = yellow reverse
+    local = yellow
+    remote = green
 
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red bold
-  new = green bold
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
 
 [color "status"]
-  added = yellow
-  changed = green
-  untracked = cyan
+    added = yellow
+    changed = green
+    untracked = cyan
 
 [status]
-   submodulesummary = true
+    submodulesummary = true
 
 [alias]
-   s = status
-   a = add
-   co = checkout
-   cm = commit
-   rb = rebase
-   cp = cherry-pick
-   c = commit
-   lg = log --oneline --decorate --graph
-   br = branch -av
-   sinit = submodule init
-   spull = pull --recurse-submodules
-   supdate = submodule update --recursive
-
+    s = status
+    a = add
+    b = branch
+    co = checkout
+    cm = commit
+    rb = rebase
+    f = fetch
+    cp = cherry-pick
+    c = commit
+    lg = log --oneline --decorate --graph
+    br = branch -av
+    sinit = submodule init
+    spull = pull --recurse-submodules
+    supdate = submodule update --recursive
+    sfrp = !git stash && git fetch && git rebase $1 && git stash pop && :
 [core]
-   excludesfile = ~/.gitignore_global
+    excludesfile = ~/.gitignore_global
 
 [user]
-   name = Jeff Kiske
-   email = jeff@ot.to
+    name = Jeff Kiske
+    email = kiske@uber.com
 
 [diff]
-   compactionHeuristic = true
+    compactionHeuristic = true

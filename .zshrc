@@ -34,18 +34,16 @@ if [[ "$(uname)" == "Darwin" ]]; then
     export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
     EMACS_OSX='/Applications/Emacs/Emacs.app/Contents/MacOS/Emacs'
     if [[ -e $EMACS_OSX ]]; then
-        export EDITOR="$EMACS_OSX -nw --no-desktop"
+        export EDITOR="vim"
         alias em=$EMACS_OSX
         alias emacs=$EMACS_OSX
     fi
     plugins+=(brew osx)
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     export DYLD_FALLBACK_LIBRARY_PATH="/usr/lib/:$DYLD_FALLBACK_LIBRARY_PATH"
-    export PATH="/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/etc/miniconda3/bin:$PATH"
+    export PATH="$HOME/.opus/bin:/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/anaconda2/bin:$PATH"
     export LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH"
-    export EDITOR="emacs -nw -Q"
-    export WORKON_HOME="$HOME/.conda/envs"
-    alias eng-vpn="sudo openvpn --config $HOME/.openvpn/eng-vpn.ovpn"
+    export EDITOR="vim"
 fi
 
 source $ZSH/oh-my-zsh.sh
